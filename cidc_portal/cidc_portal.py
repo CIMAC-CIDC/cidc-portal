@@ -1,6 +1,9 @@
 from flask import Flask
 
+from constants import FLASK_SECRET_KEY
+
 APP = Flask(__name__)
+APP.config['SECRET_KEY'] = FLASK_SECRET_KEY
 
 
 def create_app():
