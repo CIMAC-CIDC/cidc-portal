@@ -1,0 +1,105 @@
+<html>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #6636cc;">
+          <a class="navbar-brand" href="#">CIDC Portal</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+              <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+            </div>
+          </div>
+            <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+            <ul class="navbar-nav ml-auto">
+                <div class="text-white m-3">
+                    Role: CIMAC User
+                </div>
+                <div class="text-white m-3">
+                    Username: Username
+                </div>
+            </ul>
+        </div>
+        </nav>
+        <div class="container m-4">
+            <div class="container">
+                <h3>Registration Status</h3>
+
+                Fill out Registration Form - <a href="/register">Registration Form</a> <br/>
+
+                Sign Code of Conduct - <a href="/coc">Code of Conduct</a><br/>
+
+                Access to Google Bucket - Access Status <br/>
+            </div>
+            <br /><br />
+            <div class="container">
+                <h3>Instructions for installing CIDC-CLI</h3>
+
+                The CIDC-CLI is used to interact with the CIDC environment. The following instructions will install
+                the CLI for you in a python virtual environment.<br /><br />
+
+                1. Clone the following repository<br /><br />
+
+                <kbd>
+                    git clone https://github.com/dfci/cidc-cli
+                </kbd><br /><br />
+
+                2. You'll need Python 3.6 installed on your system. (<a href="https://www.python.org/">https://www.python.org/</a>)<br /><br />
+                3. If you don't have pipenv installed, you can install it with<br /><br />
+
+                <kbd>
+                    pip install pipenv
+                </kbd><br /><br />
+
+                4. Now navigate into the directory of the cidc-cli tool source you cloned above<br /><br />
+
+                <kbd>
+                    cd cidc-cli
+                </kbd><br /><br />
+
+                5. To install the required packages for the <b>cidc-cli</b> run<br /><br />
+
+                <kbd>
+                    pipenv install
+                </kbd><br /><br />
+
+                6. You'll need to install the command line tool to your system, the easiest way is to enter the pipenv shell<br/><br/>
+
+                <kbd>
+                    pipenv shell
+                </kbd><br /><br />
+
+                7. Once inside the shell, run the following. This should install the CLI and add it to your virtual environments path.<br/><br/>
+
+                <kbd>
+                    pip3 install . --user
+                </kbd><br /><br />
+
+                8. Test that the CLI starts with the following,<br /><br />
+
+                <kbd>
+                    cidc_cli
+                </kbd><br /><br />
+
+
+            </div>
+            <div class="container">
+                <h3>Uploading data to CIDC</h3>
+
+                After the above steps are completed you are ready to upload data to CIDC<br /><br />
+
+                You can pass your credentials to the CLI so you don't have to log in again with the following command.<br /><br />
+
+                <kbd style="word-wrap: break-word;width: 100px;">
+                    cidc_cli --jwt={{ jwt }}
+                </kbd><br /><br />
+
+            </div>
+
+
+        </div>
+    </body>
+
+</html>
