@@ -3,8 +3,8 @@ from flask import render_template
 from flask import session
 
 cimac_biofx_bp = Blueprint('cimac_biofx',
-                    __name__,
-                    template_folder='templates')
+                           __name__,
+                           template_folder='templates')
 
 
 @cimac_biofx_bp.route('/cimac_biofx/home', methods=['GET'])

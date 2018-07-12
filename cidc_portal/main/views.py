@@ -33,5 +33,5 @@ def callback_controller():
 
     if user_role == "CIMAC_BIOFX":
         return redirect("/cimac_biofx/home")
-    else:
-        return redirect("/")
+
+    return redirect("/")
