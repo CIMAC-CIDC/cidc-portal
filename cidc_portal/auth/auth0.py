@@ -1,9 +1,10 @@
 import requests
-import json
 
-from urllib.request import urlopen
-from authlib.flask.client import OAuth as OAuth_authlib
+from authlib.flask.client import OAuth
+
 from flask import _request_ctx_stack
+
+from jose import jwt
 
 from constants import (
     AUTH0_CLIENT_ID,
@@ -17,7 +18,7 @@ from constants import (
 
 def establish_login_auth(app):
 
-    oauth = OAuth_authlib(app)
+    oauth = OAuth(app)
 
     auth0 = oauth.register(
         'auth0',
@@ -40,13 +41,17 @@ def get_auth0_login(login_auth):
 
 
 def callback_handling(login_auth):
+
     # Handles response from token endpoint
-    access_tokens = login_auth.authorize_access_token()
+    access_tokens = login_auth.authorize_access_token(audience=AUTH0_AUDIENCE)
 
-    return access_tokens["id_token"]
+    payload = token_auth(access_tokens["id_token"])
+
+    return access_tokens["id_token"], payload
 
 
-# TODO: This is repeated from ingestion-api
+
+# TODO: This is all repeated from ingestion-api
 # Format error response and append status code.
 class AuthError(Exception):
     """[summary]
@@ -59,17 +64,9 @@ class AuthError(Exception):
         self.status_code = status_code
 
 
-def token_auth(token):
-    """
-    Checks if the supplied token is valid.
-    """
+def get_rsa_key(token):
     json_url = "https://" + AUTH0_DOMAIN + "/.well-known/jwks.json"
-    jsonurl = urlopen(json_url)
-    jwks = json.loads(jsonurl.read())
-
-    if not token:
-        print('no token received')
-        return False
+    jwks = requests.get(json_url).json()
 
     unverified_header = None
     try:
@@ -91,13 +88,33 @@ def token_auth(token):
                 "n": key["n"],
                 "e": key["e"]
             }
+
+    return rsa_key
+
+
+def token_auth(token):
+    """
+    Checks if the supplied token is valid.
+    """
+
+    if not token:
+        raise AuthError(
+            {
+                "code": "token_missing",
+                "description": "Token was missing in callback"
+            },
+            401
+        )
+
+    rsa_key = get_rsa_key(token)
+
     if rsa_key:
         try:
             payload = jwt.decode(
                 token,
                 rsa_key,
                 algorithms=ALGORITHMS,
-                audience=AUTH0_AUDIENCE,
+                audience=AUTH0_CLIENT_ID,
                 issuer="https://"+AUTH0_DOMAIN+"/"
             )
         except jwt.ExpiredSignatureError:
@@ -128,30 +145,10 @@ def token_auth(token):
                 401
             )
 
-        # Get user e-mail from userinfo endpoint.
-        if 'gty' not in payload:
-            res = requests.get(
-                'https://cidc-test.auth0.com/userinfo',
-                headers={"Authorization": 'Bearer {}'.format(token)}
-            )
+        _request_ctx_stack.top.current_user = payload
 
-            if not res.status_code == 200:
-                print("There was an error fetching user information")
-                raise AuthError(
-                    {
-                        "code": "No_info",
-                        "description": "No userinfo found at endpoint"
-                    },
-                    401
-                )
+        return payload
 
-            payload['email'] = res.json()['email']
-            _request_ctx_stack.top.current_user = payload
-            return True
-        else:
-            payload['email'] = "taskmanager-client"
-            _request_ctx_stack.top.current_user = payload
-            return True
     raise AuthError(
         {
             "code": "invalid_header",
