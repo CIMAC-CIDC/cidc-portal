@@ -10,7 +10,10 @@ def requires_login():
     def wrapper(f):
         @wraps(f)
         def wrapped(*args, **kwargs):
-            if session["jwt_token"] is None or session["cidc_user_info"]["role"] is None:
+            if "jwt_token" not in session \
+                    or session["jwt_token"] is None \
+                    or "cidc_user_info" not in session\
+                    or session["cidc_user_info"]["role"] is None:
                 return redirect(url_for_with_prefix("/login"))
             return f(*args, **kwargs)
         return wrapped

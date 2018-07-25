@@ -58,9 +58,9 @@ def callback_controller():
 
 @main_bp.route('/', methods=['GET'])
 def index():
-    session["cidc_user_info"] = get_user_info(session["jwt_token"])
-
     if "jwt_token" in session and session["jwt_token"] is not None:
+
+        session["cidc_user_info"] = get_user_info(session["jwt_token"])
 
         # If the user is logged in, direct them to their roles homepage.
         if session["cidc_user_info"]["role"] == CIMAC_BIOFX_ROLE:
