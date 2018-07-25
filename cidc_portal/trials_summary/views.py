@@ -1,6 +1,11 @@
 from flask import Blueprint
 from flask import render_template
-from cidc_portal.auth.auth0 import requires_login, requires_roles
+from flask import session
+
+from cidc_portal.auth.wrapper import requires_login, requires_roles
+
+from constants import ADMIN_ROLE
+from constants import CIMAC_BIOFX_ROLE
 
 trials_summary_bp = Blueprint('trials_summary',
                            __name__,
@@ -8,13 +13,17 @@ trials_summary_bp = Blueprint('trials_summary',
 
 
 @trials_summary_bp.route('/trials-summary', methods=['GET'])
-@requires_login
-@requires_roles("cimac_biofx", "cidc_user")
+@requires_login()
+@requires_roles([CIMAC_BIOFX_ROLE, ADMIN_ROLE])
 def home():
+
     trials_object = [{"trial_name": "Trial 1",
                       "start_date": "01/01/2001",
                       "drug_tested": "DRUG1",
                       "samples": []},
                      {"trial_name": "Trial 2", "start_date": "02/01/2001"}]
 
-    return render_template('trials_summary.jinja2', trials_object=trials_object)
+    return render_template('trials_summary.jinja2',
+                           trials_object=trials_object,
+                           user_role=session["cidc_user_info"]["role"],
+                           user_name=session["cidc_user_info"]["username"])

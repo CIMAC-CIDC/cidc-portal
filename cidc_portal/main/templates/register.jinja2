@@ -1,0 +1,71 @@
+{% extends "base_header.jinja2" %}
+
+{% block content %}
+    <h1>CIMAC-CIDC User Registration</h1>
+    <p class="important">Please fill in the information below.</p>
+            <div class="container">
+                <div class="row">
+                    <div class="column">
+
+                        <form method="POST" action="{{ save_url }}">
+                            {{ register_form.csrf_token }}
+
+                            <div class="form-group">
+                                {{ register_form.email.label }}
+                                {{ register_form.email(class_="form-control", readonly="readonly", value=user_name) }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ register_form.contact_email.label }}
+                                {{ register_form.contact_email(class_="form-control", value=user_name) }}
+                                <small id="cidc_contact_help" class="form-text text-muted">We'll only use this address to let you know about system notification and updates.</small>
+                            </div>
+
+                            <div class="form-group">
+                                {{ register_form.organization.label }}
+                                {{ register_form.organization(class_="form-control") }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ register_form.first_n.label }}
+                                {{ register_form.first_n(class_="form-control") }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ register_form.last_n.label }}
+                                {{ register_form.last_n(class_="form-control") }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ register_form.cidc_role.label }}
+                                {{ register_form.cidc_role(class_="form-control") }}
+                            </div>
+
+                            <small id="cidc_role_help" class="form-text text-muted">Don't know what to put here? Leave us a note in the box and we'll figure it out!</small>
+
+                            <br /><br />
+
+                            <h3>Code of Conduct</h3>
+
+                            You are about to access a system which contains private medical data protected by
+                            federal law. Information on system usage may be monitored and recorded, and subject to
+                            audit. Unauthorized use of this system is strictly prohibited and subject to criminal
+                            and civil penalties. By using this tool you consent to the monitoring and
+                            recording of your actions on this system.
+
+                            <br /><br />
+
+                            <div class="form-check">
+                                {{ register_form.coc_signed(class_="form-check-input") }}
+                                {{ register_form.coc_signed.label(class_="form-check-label") }}
+                            </div>
+
+                            <br /><br />
+
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+{% endblock %}

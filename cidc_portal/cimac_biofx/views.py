@@ -4,7 +4,11 @@ from flask import session
 
 from cidc_portal.auth.wrapper import requires_login, requires_roles
 
+from cidc_portal.main.services.user import get_user_info
 from cidc_portal.main.services.user import get_cimac_biofox_user_home_data
+
+from constants import ADMIN_ROLE
+from constants import CIMAC_BIOFX_ROLE
 
 cimac_biofx_bp = Blueprint('cimac_biofx',
                            __name__,
@@ -13,26 +17,15 @@ cimac_biofx_bp = Blueprint('cimac_biofx',
 
 @cimac_biofx_bp.route('/cimac_biofx/home', methods=['GET'])
 @requires_login()
-@requires_roles(["CIMAC_BIOFX"])
+@requires_roles([CIMAC_BIOFX_ROLE, ADMIN_ROLE])
 def home():
+    session["cidc_user_info"] = get_user_info(session["jwt_token"])
+
     user_home_data = get_cimac_biofox_user_home_data(session["jwt_token"])
 
     return render_template('home.jinja2',
                            jwt=session["jwt_token"],
-                           user_role=session["user_role"],
-                           user_name=session["user_name"],
+                           user_role=session["cidc_user_info"]["role"],
+                           user_name=session["cidc_user_info"]["username"],
                            user_home_data=user_home_data)
 
-
-@cimac_biofx_bp.route('/cimac_biofx/register', methods=['GET'])
-@requires_login()
-@requires_roles(["CIMAC_BIOFX"])
-def register():
-    return render_template('register.jinja2')
-
-
-@cimac_biofx_bp.route('/cimac_biofx/coc', methods=['GET'])
-@requires_login()
-@requires_roles(["CIMAC_BIOFX"])
-def coc():
-    return render_template('coc.jinja2')

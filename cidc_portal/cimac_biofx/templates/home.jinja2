@@ -6,11 +6,9 @@
             <div class="container">
                 <h3>Registration Status</h3>
 
-                Fill out Registration Form - <a href="/register">Registration Form</a> <br/>
+                Registration Form and Code of Conduct completed - {{ session["cidc_user_info"]["registration_submit_date"] }} <br/><br/>
 
-                Sign Code of Conduct - <a href="/coc">Code of Conduct</a><br/>
-
-                Access to Google Bucket - Access Status <br/>
+                Access to Google Bucket - {{ user_home_data["gcp_upload_permission"] }} <br/><br/>
 
                 Trials you are assigned to <br />
                 <ul class="list-group">
