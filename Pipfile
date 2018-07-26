@@ -12,6 +12,7 @@ python-dotenv = "*"
 python-jose = "*"
 cidc_utils = {git = "https://github.com/dfci/cidc-utils"}
 nose = "*"
+wtforms = "*"
 
 [requires]
 python_version = "3.6"

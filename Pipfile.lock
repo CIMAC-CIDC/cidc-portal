@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "ea7be24bb357d5dba549bb5d16377da1b3044c7b3fe536ca6cd5da2b8a4d0437"
+            "sha256": "cdc824060a017d865326f99b2ed62d19fad7e255cd520fb5ced75e67eb33c687"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -85,7 +85,7 @@
         },
         "cidc-utils": {
             "git": "https://github.com/dfci/cidc-utils",
-            "ref": "faad4f951e0640ee101d5348d06cbbe9abda5e64"
+            "ref": "b9fc40bc4ab70777b168973af6bad09c7e4a4c7b"
         },
         "click": {
             "hashes": [
@@ -208,7 +208,6 @@
                 "sha256:63b52e3c866428a224f97cab011de738c36aec0185aa91cfacd418b5d58911d1",
                 "sha256:ec22d826a36ed72a7358ff3fe56cbd4ba69dd7a6718ffd450ff0e9df7a47ce6a"
             ],
-            "markers": "python_version != '3.2.*' and python_version != '3.1.*' and python_version != '3.3.*' and python_version < '4' and python_version >= '2.6' and python_version != '3.0.*'",
             "version": "==2.19.1"
         },
         "rsa": {
@@ -238,6 +237,14 @@
                 "sha256:d5da73735293558eb1651ee2fddc4d0dedcfa06538b8813a2e20011583c9e49b"
             ],
             "version": "==0.14.1"
+        },
+        "wtforms": {
+            "hashes": [
+                "sha256:0cdbac3e7f6878086c334aa25dc5a33869a3954e9d1e015130d65a69309b3b61",
+                "sha256:e3ee092c827582c50877cdbd49e9ce6d2c5c1f6561f849b3b068c1b8029626f1"
+            ],
+            "index": "pypi",
+            "version": "==2.2.1"
         }
     },
     "develop": {}

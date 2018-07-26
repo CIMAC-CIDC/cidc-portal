@@ -25,6 +25,11 @@ AUTH0_DOMAIN = env.get('PORTAL_AUTH0_DOMAIN')
 AUTH0_AUDIENCE = env.get('PORTAL_AUTH0_AUDIENCE')
 ALGORITHMS = ["RS256"]
 
+ADMIN_ROLE = "admin"
+CIMAC_BIOFX_ROLE = "uploader"
+REGISTRANT_ROLE = "registrant"
+
+
 LOGGER = logging.getLogger('cidc-portal')
 LOGGER.setLevel(logging.DEBUG)
 
