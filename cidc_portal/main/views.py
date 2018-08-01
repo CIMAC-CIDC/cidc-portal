@@ -17,6 +17,7 @@ from cidc_portal.main.services.user import get_user_info, update_user_info
 from cidc_portal.auth.wrapper import requires_login, requires_roles
 
 from .services.utils import url_for_with_prefix
+from .services.utils import base_user_info
 
 from .forms.registration import RegistrationForm
 
@@ -25,6 +26,11 @@ main_bp = Blueprint('main',
                     template_folder='templates')
 
 auth0 = establish_login_auth(current_app)
+
+
+@main_bp.context_processor
+def build_main_context():
+    return base_user_info(session)
 
 
 @main_bp.route('/logout', methods=['GET'])
@@ -100,8 +106,6 @@ def register():
         return redirect(url_for_with_prefix("/request_pending"))
 
     return render_template('register.jinja2',
-                           user_role=session["cidc_user_info"]["role"],
-                           user_name=session["cidc_user_info"]["username"],
                            save_url=url_for_with_prefix("/register"),
                            register_form=register_form)
 
@@ -122,6 +126,4 @@ def request_pending():
     if not session["cidc_user_info"]["registered"]:
         return redirect(url_for_with_prefix("/register"))
 
-    return render_template('request-pending.jinja2',
-                           user_role=session["cidc_user_info"]["role"],
-                           user_name=session["cidc_user_info"]["username"])
+    return render_template('request-pending.jinja2')
