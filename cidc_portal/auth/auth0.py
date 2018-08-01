@@ -1,4 +1,5 @@
 import requests
+import logging
 
 from authlib.flask.client import OAuth
 
@@ -105,6 +106,11 @@ def token_auth(token):
             },
             401
         )
+
+    logging.info({
+        'message': "Getting RSA Key",
+        'category': 'FAIR-PORTAL-RSAKEY'
+    })
 
     rsa_key = get_rsa_key(token)
 

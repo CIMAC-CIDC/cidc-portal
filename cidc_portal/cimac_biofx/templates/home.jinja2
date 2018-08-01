@@ -2,89 +2,124 @@
 
 {% block content %}
 
-      <div class="container m-4">
-            <div class="container">
-                <h3>Registration Status</h3>
+    <script src="https://semantic-ui.com/javascript/library/highlight.min.js"></script>
 
-                Registration Form and Code of Conduct completed - {{ session["cidc_user_info"]["registration_submit_date"] }} <br/><br/>
+    <div class="ui message attached">
+        <h4 class="ui header">User Status</h4>
+    </div>
+    <div class="ui attached fluid segment">
+        <h4 class="ui sub header">Registration Form and Code of Conduct</h4>
+        <b>Completed {{ session["cidc_user_info"]["registration_submit_date"] }}</b>
 
-                Access to Google Bucket - {{ user_home_data["gcp_upload_permission"] }} <br/><br/>
+        <h5 class="ui sub header">Access to Google Bucket</h5>
+        <p>{{ user_home_data["gcp_upload_permission"] }} </p>
 
-                Trials you are assigned to <br />
-                <ul class="list-group">
+        <h5 class="ui sub header">Trials you are assigned to</h5>
+        <div class="ui bulleted list">
+            <div class="item">
                 {% for trial in user_home_data["trials"] %}
-                    <li class="list-group-item">{{ trial["trial_name"] }}</li>
+                    <div class="content">{{ trial["trial_name"] }}</div>
                 {% endfor %}
-                </ul>
-
             </div>
-            <br /><br />
-            <div class="container">
-                <h3>Instructions for installing CIDC-CLI</h3>
-
-                The CIDC-CLI is used to interact with the CIDC environment. The following instructions will install
-                the CLI for you in a python virtual environment.<br /><br />
-
-                1. Clone the following repository<br /><br />
-
-                <kbd>
-                    git clone https://github.com/dfci/cidc-cli
-                </kbd><br /><br />
-
-                2. You'll need Python 3.6 installed on your system. (<a href="https://www.python.org/">https://www.python.org/</a>)<br /><br />
-                3. If you don't have pipenv installed, you can install it with<br /><br />
-
-                <kbd>
-                    pip install pipenv
-                </kbd><br /><br />
-
-                4. Now navigate into the directory of the cidc-cli tool source you cloned above<br /><br />
-
-                <kbd>
-                    cd cidc-cli
-                </kbd><br /><br />
-
-                5. To install the required packages for the <b>cidc-cli</b> run<br /><br />
-
-                <kbd>
-                    pipenv install
-                </kbd><br /><br />
-
-                6. You'll need to install the command line tool to your system, the easiest way is to enter the pipenv shell<br/><br/>
-
-                <kbd>
-                    pipenv shell
-                </kbd><br /><br />
-
-                7. Once inside the shell, run the following. This should install the CLI and add it to your virtual environments path.<br/><br/>
-
-                <kbd>
-                    pip3 install . --user
-                </kbd><br /><br />
-
-                8. Test that the CLI starts with the following,<br /><br />
-
-                <kbd>
-                    cidc_cli
-                </kbd><br /><br />
-
-
-            </div>
-            <div class="container">
-                <h3>Uploading data to CIDC</h3>
-
-                After the above steps are completed you are ready to upload data to CIDC<br /><br />
-
-                You can pass your credentials to the CLI so you don't have to log in again with the following commands.<br /><br />
-
-                <kbd style="word-wrap: break-word;width: 100px;">
-                    cidc_cli<br />
-                     jwt_login {{ jwt }}
-                </kbd><br /><br />
-
-            </div>
-
-
         </div>
+    </div>
+
+    <div class="ui segments">
+        <div class="ui message attached">
+            <h3 class="ui header">Instructions for installing CIDC-CLI</h3>
+        </div>
+        <div class="ui segment">
+
+            The CIDC-CLI is used to interact with the CIDC environment. The following instructions will install
+            the CLI for you in a python virtual environment.<br/><br/>
+
+            <div class="ui segments">
+                <div class="ui segment">
+                    1. Clone the following repository<br/><br/>
+
+                    <code class="bash">
+                        git clone https://github.com/dfci/cidc-cli
+                    </code>
+                </div>
+
+                <div class="ui segment">
+                    2. You'll need Python 3.6 installed on your system. (<a href="https://www.python.org/">https://www.python.org/</a>)<br/><br/>
+                </div>
+
+                <div class="ui segment">
+                    3. If you don't have pipenv installed, you can install it with<br/><br/>
+
+                    <code>
+                        pip install pipenv
+                    </code>
+                </div>
+
+                <div class="ui segment">
+                    4. Now navigate into the directory of the cidc-cli tool source you cloned above<br/><br/>
+
+                    <code>
+                        cd cidc-cli
+                    </code>
+                </div>
+
+                <div class="ui segment">
+
+                    5. To install the required packages for the <b>cidc-cli</b> run<br/><br/>
+
+                    <code>
+                        pipenv install
+                    </code>
+                </div>
+
+                <div class="ui segment">
+                    6. You'll need to install the command line tool to your system, the easiest way is to enter the
+                    pipenv
+                    shell<br/><br/>
+
+                    <code>
+                        pipenv shell
+                    </code>
+                </div>
+                <div class="ui segment">
+                    7. Once inside the shell, run the following. This should install the CLI and add it to your virtual
+                    environments path.<br/><br/>
+
+                    <code>
+                        pip3 install . --user
+                    </code>
+                </div>
+                <div class="ui segment">
+                    8. Test that the CLI starts with the following,<br/><br/>
+
+                    <code>
+                        cidc_cli
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui segments">
+        <div class="ui message attached">
+            <h3 class="ui header">Uploading data to CIDC</h3>
+        </div>
+        <div class="ui segment">
+            After the above steps are completed you are ready to upload data to CIDC<br/><br/>
+
+            <div class="ui segments">
+                <div class="ui segment">
+                    You can pass your credentials to the CLI so you don't have to log in again with the following
+                    commands.<br/><br/>
+
+                    <code style="word-wrap: break-word;width: 50px;">
+                        jwt_login {{ jwt }}
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
 
 {% endblock %}
