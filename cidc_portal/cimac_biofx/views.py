@@ -31,7 +31,5 @@ def home():
 
     return render_template('home.jinja2',
                            jwt=session["jwt_token"],
-                           user_role=session["cidc_user_info"]["role"],
-                           user_name=session["cidc_user_info"]["username"],
                            user_home_data=user_home_data)
 

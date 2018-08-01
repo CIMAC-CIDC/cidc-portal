@@ -31,6 +31,4 @@ def home():
                      {"trial_name": "Trial 2", "start_date": "02/01/2001"}]
 
     return render_template('trials_summary.jinja2',
-                           trials_object=trials_object,
-                           user_role=session["cidc_user_info"]["role"],
-                           user_name=session["cidc_user_info"]["username"])
+                           trials_object=trials_object)

@@ -106,8 +106,6 @@ def register():
         return redirect(url_for_with_prefix("/request_pending"))
 
     return render_template('register.jinja2',
-                           user_role=session["cidc_user_info"]["role"],
-                           user_name=session["cidc_user_info"]["username"],
                            save_url=url_for_with_prefix("/register"),
                            register_form=register_form)
 
