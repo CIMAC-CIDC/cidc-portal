@@ -33,6 +33,11 @@ def build_main_context():
     return base_user_info(session)
 
 
+@main_bp.route('/privacy', methods=['GET'])
+def privacy():
+    return render_template('privacy.jinja2')
+
+
 @main_bp.route('/logout', methods=['GET'])
 def logout():
 
@@ -68,20 +73,24 @@ def index():
 
         session["cidc_user_info"] = get_user_info(session["jwt_token"])
 
-        # If the user is logged in, direct them to their roles homepage.
-        if session["cidc_user_info"]["role"] == CIMAC_BIOFX_ROLE:
-            return redirect(url_for_with_prefix("/cimac_biofx/home"))
-        elif session["cidc_user_info"]["role"] == REGISTRANT_ROLE:
+        # This will be None if the user's token was invalid for any reason.
+        if session["cidc_user_info"] is not None:
+            # If the user is logged in, direct them to their roles homepage.
+            if session["cidc_user_info"]["role"] == CIMAC_BIOFX_ROLE:
+                return redirect(url_for_with_prefix("/cimac_biofx/home"))
+            elif session["cidc_user_info"]["role"] == REGISTRANT_ROLE:
 
-            # Check if user's registration is filled out.
-            if session["cidc_user_info"]["registered"]:
-                return redirect(url_for_with_prefix("/register"))
-            else:
-                return redirect(url_for_with_prefix("/request_pending"))
+                # Check if user's registration is filled out.
+                if session["cidc_user_info"]["registered"]:
+                    return redirect(url_for_with_prefix("/register"))
+                else:
+                    return redirect(url_for_with_prefix("/request_pending"))
 
-        elif session["cidc_user_info"]["role"] == ADMIN_ROLE:
-            return redirect(url_for_with_prefix("/trials-summary"))
+            elif session["cidc_user_info"]["role"] == ADMIN_ROLE:
+                return redirect(url_for_with_prefix("/trials-summary"))
 
+        # The user's JWT was invalid but they have a session, clear their session and start over again.
+        return redirect(url_for_with_prefix("/logout"))
     return redirect(url_for_with_prefix("/login"))
 
 
