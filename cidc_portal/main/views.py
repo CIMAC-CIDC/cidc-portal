@@ -4,6 +4,7 @@ from flask import current_app
 from flask import session
 from flask import render_template
 from flask import request
+from flask import flash
 
 from constants import ADMIN_ROLE
 from constants import CIMAC_BIOFX_ROLE
@@ -101,10 +102,15 @@ def register():
     register_form = RegistrationForm(request.form)
 
     # Form submission method.
-    if request.method == 'POST' and register_form.validate():
-        update_user_info(session["jwt_token"], register_form)
-        return redirect(url_for_with_prefix("/request_pending"))
+    if request.method == 'POST':
+        if register_form.validate():
+            update_user_info(session["jwt_token"], register_form)
+            return redirect(url_for_with_prefix("/request_pending"))
+        else:
 
+            render_template('register.jinja2',
+                            save_url=url_for_with_prefix("/register"),
+                            register_form=register_form)
     return render_template('register.jinja2',
                            save_url=url_for_with_prefix("/register"),
                            register_form=register_form)
