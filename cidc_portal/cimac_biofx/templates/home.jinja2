@@ -2,19 +2,33 @@
 
 {% block content %}
 
-    <script src="https://semantic-ui.com/javascript/library/highlight.min.js"></script>
+    <style type="text/css">
+        .console_text {
+            font-family: Monaco;
+        }
+    </style>
+
+    <script type="application/javascript">
+        function copy_jwt() {
+            var copyText = document.getElementById("jwt");
+            copyText.select();
+            document.execCommand("copy");
+        }
+    </script>
+
 
     <div class="ui message attached">
         <h4 class="ui header">User Status</h4>
     </div>
-    <div class="ui attached fluid segment">
-        <h4 class="ui sub header">Registration Form and Code of Conduct</h4>
-        <b>Completed {{ session["cidc_user_info"]["registration_submit_date"] }}</b>
 
-        <h5 class="ui sub header">Access to Google Bucket</h5>
+    <div class="ui attached fluid segment">
+        <h4>Registration Form and Code of Conduct</h4>
+        Completed {{ session["cidc_user_info"]["registration_submit_date"] }}
+
+        <h4>Access to Google Bucket</h4>
         <p>{{ user_home_data["gcp_upload_permission"] }} </p>
 
-        <h5 class="ui sub header">Trials you are assigned to</h5>
+        <h4>Trials you are assigned to</h4>
         <div class="ui bulleted list">
             <div class="item">
                 {% for trial in user_home_data["trials"] %}
@@ -35,65 +49,83 @@
 
             <div class="ui segments">
                 <div class="ui segment">
-                    1. Clone the following repository<br/><br/>
-
-                    <code class="bash">
-                        git clone https://github.com/dfci/cidc-cli
-                    </code>
+                    <h4>1. Clone the CLI repository (<a href="https://github.com/dfci/cidc-cli">https://github.com/dfci/cidc-cli</a>)
+                    </h4>
+                    <div class="ui segments">
+                        <div class="ui black segment inverted console_text">
+                            $ git clone https://github.com/dfci/cidc-cli
+                        </div>
+                    </div>
                 </div>
 
                 <div class="ui segment">
-                    2. You'll need Python 3.6 installed on your system. (<a href="https://www.python.org/">https://www.python.org/</a>)<br/><br/>
+                    <h4>2. You'll need Python 3.6 installed on your system. (<a href="https://www.python.org/">https://www.python.org/</a>)
+                    </h4>
                 </div>
 
                 <div class="ui segment">
-                    3. If you don't have pipenv installed, you can install it with<br/><br/>
-
-                    <code>
-                        pip install pipenv
-                    </code>
+                    <h4>3. If you don't have pipenv installed, you can install it with</h4>
+                    <div class="ui segments">
+                        <div class="ui black segment inverted console_text">
+                            $ pip install pipenv
+                        </div>
+                    </div>
                 </div>
 
                 <div class="ui segment">
-                    4. Now navigate into the directory of the cidc-cli tool source you cloned above<br/><br/>
+                    <h4>4. Now navigate into the directory of the cidc-cli tool source you cloned above</h4>
 
-                    <code>
-                        cd cidc-cli
-                    </code>
+                    <div class="ui segments">
+                        <div class="ui black segment inverted console_text">
+                            $ cd cidc-cli
+                        </div>
+                    </div>
                 </div>
 
                 <div class="ui segment">
+                    <h4>5. You'll need to install the command line tool to your system, the easiest way is to enter the
+                        pipenv shell</h4>
 
-                    5. To install the required packages for the <b>cidc-cli</b> run<br/><br/>
+                    <div class="ui segments">
+                        <div class="ui black segment inverted console_text">
+                            $ pipenv shell
+                        </div>
+                    </div>
 
-                    <code>
-                        pipenv install
-                    </code>
-                </div>
-
-                <div class="ui segment">
-                    6. You'll need to install the command line tool to your system, the easiest way is to enter the
-                    pipenv
-                    shell<br/><br/>
-
-                    <code>
-                        pipenv shell
-                    </code>
                 </div>
                 <div class="ui segment">
-                    7. Once inside the shell, run the following. This should install the CLI and add it to your virtual
-                    environments path.<br/><br/>
+                    <h4>6. Once inside the shell, run the following. This should install the CLI and add it to your
+                        virtual
+                        environments path.</h4>
 
-                    <code>
-                        pip3 install . --user
-                    </code>
+                    <div class="ui segments">
+                        <div class="ui black segment inverted console_text">
+                            $ pip3 install .
+                        </div>
+                    </div>
                 </div>
                 <div class="ui segment">
-                    8. Test that the CLI starts with the following,<br/><br/>
+                    <h4>7. Test that the CLI starts with the following</h4>
 
-                    <code>
-                        cidc_cli
-                    </code>
+                    <div class="ui segments">
+                        <div class="ui black segment inverted console_text">
+                            $ cidc_cli
+                        </div>
+                    </div>
+
+                    <h4>Expected Output</h4>
+                    <div class="ui segments">
+                        <div class="ui black segment inverted console_text">
+                            Welcome to the CIDC CLI Tool,<br/>
+                            you are about to access a system which contains private medical data protected by <br/>
+                            federal law. Information on system usage may be monitored and recorded, and subject to <br/>
+                            audit. Unauthorized use of this system is strictly prohibited and subject to criminal <br/>
+                            and civil penalties. By using this tool you consent to the monitoring and <br/>
+                            recording of your actions on this system. <br/>
+
+                            Do you agree to the above terms and conditions? <br/>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -104,22 +136,85 @@
             <h3 class="ui header">Uploading data to CIDC</h3>
         </div>
         <div class="ui segment">
-            After the above steps are completed you are ready to upload data to CIDC<br/><br/>
+            <h4>After the above steps are completed you are ready to upload data to CIDC!</h4>
 
             <div class="ui segments">
                 <div class="ui segment">
-                    You can pass your credentials to the CLI so you don't have to log in again with the following
-                    commands.<br/><br/>
+                    <h4>You can log into the CLI via the set of commands below. First start the CLI</h4>
 
-                    <code style="word-wrap: break-word;width: 50px;">
-                        jwt_login {{ jwt }}
-                    </code>
+                    <div class="ui segments">
+                        <div class="ui black segment inverted console_text">
+                            $ cidc_cli
+                        </div>
+                    </div>
+
+                    <h4>Expected Output</h4>
+                    <div class="ui segments">
+                        <div class="ui black segment inverted console_text">
+                            ...
+                            Do you agree to the above terms and conditions? <br/>
+                        </div>
+                    </div>
+
+                    <div class="ui horizontal divider">
+                        Next
+                    </div>
+
+                    <h4>Typing yes will act as your agreement to the terms and conditions.</h4>
+
+                    <div class="ui segments">
+                        <div class="ui black segment inverted console_text">
+                            $ yes
+                        </div>
+                    </div>
+
+                    <h4>Expected Output after agreeing to the terms and conditions is a Cmd prompt</h4>
+                    <div class="ui segments">
+                        <div class="ui black segment inverted console_text">
+                            (Cmd)
+                        </div>
+                    </div>
+                    <div class="ui horizontal divider">
+                        Next
+                    </div>
+
+                    <h4>Now you'll use the jwt_login command and paste in your JWT.
+                        You can find your JWT at the bottom of this page.</h4>
+
+                    <div class="ui segments">
+                        <div class="ui black segment inverted console_text">
+                            (Cmd) jwt_login ey927853.......
+                        </div>
+                    </div>
+                    <div class="ui message red">
+                        Your JWT is a long token that represents your identity within the CIDC System, Treat it as you
+                        would a password! Anyone who has your JWT can perform actions as if they were you.<br/><br/>
+                        Do not share your JWT with anyone! We will never ask you to send a JWT over e-mail.<br/><br/>
+                        <button class="ui red button" onclick="$('#jwt_div').toggle();">
+                            Click to reveal the JWT that you will paste in the above command.
+                        </button>
+                        <br/><br/>
+                        <div id="jwt_div" class="ui input" style="display: none;">
+                            <button class="ui blue button" onclick="copy_jwt();">
+                                Copy JWT to Clipboard
+                            </button>
+                            <input id="jwt" type="text" value="{{ jwt }}"/>
+                        </div>
+                    </div>
+                    <div class="ui horizontal divider">
+                        Next
+                    </div>
+                    <h4>The final step to start the upload process is the upload_data command. This will
+                    launch an interactive command line session to walk you through data upload</h4>
+                    <div class="ui segments">
+                        <div class="ui black segment inverted console_text">
+                            (Cmd) upload_data
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-
-
+    
 
 {% endblock %}
