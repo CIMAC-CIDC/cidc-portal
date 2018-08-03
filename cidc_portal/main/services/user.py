@@ -62,7 +62,7 @@ def get_user_info(jwt: str):
 
         return user_info
     except RuntimeError:
-        return None, None
+        return None
 
 
 def get_trials(jwt: str):
