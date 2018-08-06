@@ -25,5 +25,7 @@ def base_user_info(session):
                     clinical_trials_status_url=url_for_with_prefix("/trials-summary"),
                     cimac_biofx_home_url=url_for_with_prefix("/cimac_biofx/home"),
                     admin_home_url=url_for_with_prefix("/admin/home"),
-                    privacy_url=url_for_with_prefix("/privacy")
+                    privacy_url=url_for_with_prefix("/privacy"),
+                    logout_url=url_for_with_prefix("/logout"),
+                    user_info_url=url_for_with_prefix("/admin/user_info"),
                     )

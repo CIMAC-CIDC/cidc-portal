@@ -1,6 +1,15 @@
 {% extends "base_header.jinja2" %}
 
 {% block content %}
-Admin Home
+
+    <h1>CIDC Admin Home</h1>
+
+    <h2>System users</h2>
+
+    {% include "user_table.jinja2" %}
+
+    <h2>Trials</h2>
+
+    {% include "trial_table.jinja2" %}
 
 {% endblock %}

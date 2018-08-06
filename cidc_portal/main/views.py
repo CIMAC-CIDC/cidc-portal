@@ -4,7 +4,6 @@ from flask import current_app
 from flask import session
 from flask import render_template
 from flask import request
-from flask import flash
 
 from constants import ADMIN_ROLE
 from constants import CIMAC_BIOFX_ROLE

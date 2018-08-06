@@ -1,0 +1,45 @@
+
+
+
+<table class="ui sortable selectable table">
+<thead>
+    <tr>
+        <th>&nbsp;</th>
+        <th class="sorted descending">Username</th>
+        <th class="sorted descending">First Name</th>
+        <th class="sorted descending">Last Name</th>
+        <th class="sorted descending">Organization</th>
+        <th class="sorted descending">Project Role</th>
+        <th class="sorted descending">User Role</th>
+    </tr>
+</thead>
+<tbody>
+    {% for user in users %}
+        <tr>
+            <td>
+                <a target="_blank" href="{{ user_info_url }}?user_id={{ user["_id"] }}">
+                    <i class="edit icon"></i>
+                </a>
+            </td>
+            <td>
+                {{ user["username"] }}
+            </td>
+            <td>
+                {{ user["first_n"] }}
+            </td>
+            <td>
+                {{ user["last_n"] }}
+            </td>
+            <td>
+                {{ user["organization"] }}
+            </td>
+            <td>
+                {{ user["position_description"] }}
+            </td>
+            <td>
+                {{ user["role"] }}
+            </td>
+        </tr>
+    {% endfor %}
+</tbody>
+</table>

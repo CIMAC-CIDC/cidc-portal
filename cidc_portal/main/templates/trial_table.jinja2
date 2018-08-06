@@ -1,0 +1,24 @@
+<table class="ui sortable selectable table">
+<thead>
+    <tr>
+        <th class="sorted descending">Trial Name</th>
+        <th class="sorted descending">PI</th>
+        <th class="sorted descending">Start date</th>
+    </tr>
+</thead>
+<tbody>
+    {% for trial in trials %}
+        <tr>
+            <td>
+                {{ trial["trial_name"] }}
+            </td>
+            <td>
+                {{ trial["principal_investigator"] }}
+            </td>
+            <td>
+                {{ trial["start_date"] }}
+            </td>
+        </tr>
+    {% endfor %}
+</tbody>
+</table>
