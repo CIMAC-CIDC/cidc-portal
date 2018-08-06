@@ -1,0 +1,44 @@
+    {% macro show_form_error(fieldname) %}
+        {% for error in register_form.errors[fieldname] %}
+            <div class="ui red message">
+                <div class="header">Error!</div>
+                <p>{{ error }}</p>
+            </div>
+        {% endfor %}
+    {% endmacro %}
+
+            <div class="disabled field">
+                {{ register_form.email.label }}
+                {{ register_form.email(class_="form-control", readonly="readonly", value=user_name) }}
+            </div>
+
+            <div class="field">
+                {{ register_form.contact_email.label }}
+                {{ register_form.contact_email(class_="form-control") }}
+                {{ show_form_error("contact_email") }}
+                <small id="cidc_contact_help" class="form-text text-muted">We'll only use this address to let you know about system notification and updates.</small>
+            </div>
+
+            <div class="field">
+                {{ register_form.organization.label }}
+                {{ register_form.organization(class_="form-control") }}
+                {{ show_form_error("organization") }}
+            </div>
+
+            <div class="field">
+                {{ register_form.first_n.label }}
+                {{ register_form.first_n(class_="form-control") }}
+                {{ show_form_error("first_n") }}
+            </div>
+
+            <div class="field">
+                {{ register_form.last_n.label }}
+                {{ register_form.last_n(class_="form-control") }}
+                {{ show_form_error("last_n") }}
+            </div>
+
+            <div class="field">
+                {{ register_form.cidc_role.label }}
+                {{ register_form.cidc_role(class_="form-control") }}
+                {{ show_form_error("cidc_role") }}
+            </div>

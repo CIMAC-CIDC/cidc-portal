@@ -33,6 +33,7 @@ def update_user_info(jwt: str, form: RegistrationForm):
     update = {
         "first_n": form.first_n.data,
         "last_n": form.last_n.data,
+        "preferred_contact_email": form.contact_email.data,
         "organization": form.organization.data,
         "registered": True,
         "position_description": form.cidc_role.data,

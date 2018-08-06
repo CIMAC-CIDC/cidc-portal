@@ -1,0 +1,60 @@
+{% extends "base_header.jinja2" %}
+
+{% block content %}
+
+    <h1>User Profile for - {{ user["username"] }}</h1>
+
+    <div class="ui message attached">
+        <h4 class="ui header">Basic User Information</h4>
+    </div>
+
+    <div class="ui attached fluid segment">
+        <form method="POST" action="{{ save_url }}" class="ui form">
+            {% include "register_demographics.jinja2" %}
+        </form>
+
+        <h4>Registration Form and Code of Conduct</h4>
+        Completed {{ user["registration_submit_date"] }}
+
+        <h4>Access to Google Bucket</h4>
+        <p>N/A</p>
+
+        <h4>Assigned Trials</h4>
+
+        <div class="ui bulleted list">
+            <div class="item">
+                {% for trial in users_trials %}
+                    <div class="content">{{ trial["trial_name"] }}</div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+    <br /><br />
+
+    <div class="ui message attached">
+        <h4 class="ui header">Activity Information</h4>
+    </div>
+
+    <div class="ui attached fluid segment">
+        <h4>Last Accessed</h4>
+        {{ user["last_access"] }}
+
+        <h4>Account Created</h4>
+        {{ user["account_create_date"] }}
+    </div>
+
+    <br /><br />
+
+    <div class="ui message attached">
+        <h4 class="ui header">Administrative Functionality</h4>
+    </div>
+
+    <div class="ui attached fluid segment">
+        <h4>System Role</h4>
+        {{ user["role"] }}
+
+    </div>
+
+{% endblock %}

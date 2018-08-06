@@ -18,9 +18,13 @@
                     <a class="item" href="{{ cimac_biofx_home_url }}">
                         CIMAC User Home
                     </a>
-                    <a class="item" href="{{ admin_home_url }}">
-                        CIDC Admin Panel
-                    </a>
+
+                    {%  if user_role == "admin" %}
+                        <a class="item" href="{{ admin_home_url }}">
+                            CIDC Admin Panel
+                        </a>
+                    {% endif %}
+
                     <div class="right menu">
                         <div class="item">
                             Role: {{ user_role }}
@@ -28,7 +32,7 @@
                         <div class="item">
                             Username: {{ user_name }}
                         </div>
-                        <a class="ui item">
+                        <a class="ui item" href="{{ logout_url }}">
                             Logout
                         </a>
                     </div>
