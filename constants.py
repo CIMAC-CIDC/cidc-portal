@@ -23,12 +23,16 @@ AUTH0_CLIENT_ID = env.get('PORTAL_AUTH0_CLIENT_ID')
 AUTH0_CLIENT_SECRET = env.get('PORTAL_AUTH0_CLIENT_SECRET')
 AUTH0_DOMAIN = env.get('PORTAL_AUTH0_DOMAIN')
 AUTH0_AUDIENCE = env.get('PORTAL_AUTH0_AUDIENCE')
+
+SENDGRID_API_KEY = env.get('SENDGRID_API_KEY')
+SEND_FROM_EMAIL = env.get('SEND_FROM_EMAIL', "no-reply@cimac-network.org")
+CIDC_MAILING_LIST = env.get('CIDC_MAILING_LIST', "cidc@jimmy.harvard.edu")
+
 ALGORITHMS = ["RS256"]
 
 ADMIN_ROLE = "admin"
 CIMAC_BIOFX_ROLE = "uploader"
 REGISTRANT_ROLE = "registrant"
-
 
 LOGGER = logging.getLogger('cidc-portal')
 LOGGER.setLevel(logging.DEBUG)

@@ -8,6 +8,7 @@ from flask import request
 from constants import ADMIN_ROLE
 from constants import CIMAC_BIOFX_ROLE
 from constants import REGISTRANT_ROLE
+from constants import CIDC_MAILING_LIST
 
 from cidc_portal.auth.auth0 import establish_login_auth
 from cidc_portal.auth.auth0 import callback_handling
@@ -18,6 +19,7 @@ from cidc_portal.auth.wrapper import requires_login, requires_roles
 
 from .services.utils import url_for_with_prefix
 from .services.utils import base_user_info
+from .services.email import send_mail
 
 from .forms.registration import RegistrationForm
 
@@ -113,6 +115,11 @@ def register():
     if request.method == 'POST':
         if register_form.validate():
             update_user_info(session["jwt_token"], register_form)
+
+            send_mail("[CIDC][AUTOMATED] USER SIGNUP",
+                      "A new user has signed up for the CIDC Portal (%s)" % register_form.contact_email.data,
+                      CIDC_MAILING_LIST)
+
             return redirect(url_for_with_prefix("/request_pending"))
         else:
 
