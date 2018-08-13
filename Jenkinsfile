@@ -85,7 +85,8 @@ spec:
         container('helm') {
           sh 'helm init --service-account tiller'
           sh 'helm repo add cidc "http://${CIDC_CHARTMUSEUM_SERVICE_HOST}:${CIDC_CHARTMUSEUM_SERVICE_PORT}" '
-          sh 'helm upgrade portal cidc/portal --set deploy=${deploy}'
+          sh 'helm repo update'
+          sh 'helm upgrade portal cidc/portal --version=0.1.0-staging --set deploy=${deploy}'
         }
       }
     }
