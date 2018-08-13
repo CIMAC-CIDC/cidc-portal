@@ -3,6 +3,7 @@ pipeline {
     kubernetes {
       label 'docker'
       defaultContainer 'jnlp'
+      serviceAccount 'helm'
       yaml """
 apiVersion: v1
 kind: Pod
