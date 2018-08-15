@@ -1,4 +1,6 @@
 import datetime
+import logging
+
 from email.utils import formatdate
 from time import mktime
 
@@ -45,8 +47,7 @@ def update_user_info(jwt: str, form: RegistrationForm):
     EVE_FETCHER.patch(endpoint=endpoint,
                       token=jwt,
                       headers=headers,
-                      json=update,
-                      verify=False)
+                      json=update)
 
 
 def get_user_info(jwt: str):
@@ -63,6 +64,10 @@ def get_user_info(jwt: str):
 
         return user_info
     except RuntimeError:
+        logging.info({
+            'message': "Runtime Error while fetching user info.",
+            'category': 'INFO-PORTAL_TO_INGESTION-API'
+        })
         return None
 
 
