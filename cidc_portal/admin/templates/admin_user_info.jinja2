@@ -22,11 +22,11 @@
         <h4>Assigned Trials</h4>
 
         <div class="ui bulleted list">
-            <div class="item">
-                {% for trial in users_trials %}
+            {% for trial in users_trials %}
+                <div class="item">
                     <div class="content">{{ trial["trial_name"] }}</div>
-                {% endfor %}
-            </div>
+                </div>
+            {% endfor %}
         </div>
 
     </div>

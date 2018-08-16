@@ -8,7 +8,7 @@ from cidc_portal.auth.wrapper import requires_login, requires_roles
 from cidc_portal.main.services.utils import base_user_info
 
 from cidc_portal.main.services.admin import fetch_users
-from cidc_portal.main.services.admin import fetch_trials
+from cidc_portal.main.services.trials import fetch_trials
 from cidc_portal.main.services.admin import fetch_users_trials
 from cidc_portal.main.services.admin import fetch_single_user
 
