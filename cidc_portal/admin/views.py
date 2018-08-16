@@ -56,6 +56,6 @@ def user_info():
     users_trials = fetch_users_trials(session["jwt_token"], retrieved_user_info["e-mail"])
 
     return render_template('admin_user_info.jinja2',
-                           user=retrieved_user_info,
+                           retrieved_user_info=retrieved_user_info,
                            register_form=register_form,
                            users_trials=users_trials)
