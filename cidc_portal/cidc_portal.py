@@ -1,6 +1,10 @@
 from flask import Flask
+from flask import session
+from datetime import timedelta
 
 from constants import FLASK_SECRET_KEY
+from constants import SESSION_TIMEOUT_MINUTES
+
 from cidc_utils.loghandler import StackdriverJsonFormatter
 
 import logging
@@ -23,6 +27,16 @@ def configure_logging():
         'message': 'LOGGER CONFIGURED',
         'category': 'INFO-EVE-LOGGING'
     })
+
+
+@APP.before_request
+def make_session_permanent():
+    """
+    Sets the Flask session to expire based on a timeout.
+    :return:
+    """
+    session.permanent = True
+    APP.permanent_session_lifetime = timedelta(minutes=SESSION_TIMEOUT_MINUTES)
 
 
 def create_app():
