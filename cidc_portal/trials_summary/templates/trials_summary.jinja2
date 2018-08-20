@@ -1,8 +1,45 @@
 {% extends "base_header.jinja2" %}
 
 {% block content %}
-    <h1>CIDC CIMAC Progress Summary</h1>
+    <h1>CIMAC-CIDC Network Progress</h1>
 
+
+            <table class="ui definition sortable selectable table">
+            <thead>
+                <tr>
+                    <th class=""></th>
+                    <th class="sorted descending">PI</th>
+                    <th class="sorted descending">Start date</th>
+                    <th class="sorted descending">Total Assays Planned</th>
+                    <th class="sorted descending">Total Specimens Shipped</th>
+                    <th class="sorted descending">Total Assays Processed</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for trial in trials %}
+                    <tr>
+                        <td>
+                            {{ trial["trial_name"] }}
+                        </td>
+                        <td>
+                            {{ trial["principal_investigator"] }}
+                        </td>
+                        <td>
+                            {{ trial["start_date"] }}
+                        </td>
+                        <td>
+                            {{ trial["assays_planned"] }}
+                        </td>
+                        <td>
+
+                        </td>
+                        <td>
+
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            </table>
 
 
 {% endblock %}

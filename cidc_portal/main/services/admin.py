@@ -19,19 +19,6 @@ def fetch_users(jwt: str) -> dict:
     return user_list
 
 
-def fetch_trials(jwt: str) -> dict:
-    """
-    Get all the trials in the system.
-
-    :param jwt: Users JWT
-    :return: Dict of all trials in system.
-    """
-    trials_response = EVE_FETCHER.get(token=jwt, endpoint='trials')
-    trials_list = trials_response.json()["_items"]
-
-    return trials_list
-
-
 def fetch_single_user(jwt: str, selected_user: str) -> dict:
     """
     Get accounts object for a single user.

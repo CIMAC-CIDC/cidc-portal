@@ -1,4 +1,9 @@
 import datetime
+import logging
+import json
+
+from flask import session
+
 from email.utils import formatdate
 from time import mktime
 
@@ -45,8 +50,7 @@ def update_user_info(jwt: str, form: RegistrationForm):
     EVE_FETCHER.patch(endpoint=endpoint,
                       token=jwt,
                       headers=headers,
-                      json=update,
-                      verify=False)
+                      json=update)
 
 
 def get_user_info(jwt: str):
@@ -63,17 +67,25 @@ def get_user_info(jwt: str):
 
         return user_info
     except RuntimeError:
+        logging.info({
+            'message': "Runtime Error while fetching user info.",
+            'category': 'INFO-PORTAL_TO_INGESTION-API'
+        })
         return None
 
 
-def get_trials(jwt: str):
+def get_trials(jwt: str, current_user: str):
     """
     Grab a listing of trial's user is a collaborator on from an Eve endpoint.
     :param jwt:
     :return:
     """
+
+    trial_params = {'collaborators': current_user}
+    endpoint_with_query = "trials?where=%s" % (json.dumps(trial_params))
+
     try:
-        trials_response = EVE_FETCHER.get(token=jwt, endpoint='trials')
+        trials_response = EVE_FETCHER.get(token=jwt, endpoint=endpoint_with_query)
         return trials_response.json()['_items']
     except RuntimeError:
         return None
@@ -89,7 +101,7 @@ def get_cimac_biofox_user_home_data(jwt: str):
     cimac_user_data = dict()
 
     cimac_user_data["gcp_upload_permission"] = None
-    cimac_user_data["trials"] = get_trials(jwt)
+    cimac_user_data["trials"] = get_trials(jwt, session["cidc_user_info"]["username"])
 
     return cimac_user_data
 

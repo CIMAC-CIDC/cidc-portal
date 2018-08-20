@@ -8,7 +8,7 @@ from cidc_portal.auth.wrapper import requires_login, requires_roles
 from cidc_portal.main.services.utils import base_user_info
 
 from cidc_portal.main.services.admin import fetch_users
-from cidc_portal.main.services.admin import fetch_trials
+from cidc_portal.main.services.trials import fetch_trials
 from cidc_portal.main.services.admin import fetch_users_trials
 from cidc_portal.main.services.admin import fetch_single_user
 
@@ -56,6 +56,6 @@ def user_info():
     users_trials = fetch_users_trials(session["jwt_token"], retrieved_user_info["e-mail"])
 
     return render_template('admin_user_info.jinja2',
-                           user=retrieved_user_info,
+                           retrieved_user_info=retrieved_user_info,
                            register_form=register_form,
                            users_trials=users_trials)
