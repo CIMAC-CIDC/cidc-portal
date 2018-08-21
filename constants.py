@@ -28,6 +28,8 @@ SENDGRID_API_KEY = env.get('SENDGRID_API_KEY')
 SEND_FROM_EMAIL = env.get('SEND_FROM_EMAIL', "no-reply@cimac-network.org")
 CIDC_MAILING_LIST = env.get('CIDC_MAILING_LIST', "cidc@jimmy.harvard.edu")
 
+SESSION_TIMEOUT_MINUTES = env.get('SESSION_TIMEOUT', 10)
+
 ALGORITHMS = ["RS256"]
 
 ADMIN_ROLE = "admin"
