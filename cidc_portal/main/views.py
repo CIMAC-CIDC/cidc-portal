@@ -1,3 +1,5 @@
+import logging
+
 from flask import Blueprint
 from flask import redirect
 from flask import current_app
@@ -38,6 +40,33 @@ def build_main_context():
 @main_bp.route('/privacy', methods=['GET'])
 def privacy():
     return render_template('privacy.jinja2')
+
+
+@main_bp.app_errorhandler(500)
+def error_500_page(err):
+    logging.error({
+        'message': err,
+        'category': 'ERROR-500-PORTAL'
+    })
+    return render_template('500.jinja2')
+
+
+@main_bp.app_errorhandler(404)
+def error_404_page(err):
+    logging.error({
+        'message': err,
+        'category': 'ERROR-404-PORTAL'
+    })
+    return render_template('404.jinja2')
+
+
+@main_bp.app_errorhandler(403)
+def error_403_page(err):
+    logging.error({
+        'message': err,
+        'category': 'ERROR-403-PORTAL'
+    })
+    return render_template('403.jinja2')
 
 
 @main_bp.route('/logout', methods=['GET'])

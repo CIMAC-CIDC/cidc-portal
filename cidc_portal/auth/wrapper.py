@@ -1,5 +1,6 @@
 from flask import session
 from flask import redirect
+from flask import abort
 
 from functools import wraps
 
@@ -25,11 +26,7 @@ def requires_roles(*roles):
         @wraps(f)
         def wrapped(*args, **kwargs):
             if session["cidc_user_info"]["role"] not in roles[0]:
-                return error_response()
+                abort(403)
             return f(*args, **kwargs)
         return wrapped
     return wrapper
-
-
-def error_response():
-    return "You've got no permission to access this page.", 403
