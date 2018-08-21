@@ -12,9 +12,12 @@
             <div class="one wide column"></div>
             <div class="fourteen wide column">
                 <div class="ui menu inverted violet">
+                    {%  if user_role != "registrant" %}
                     <a class="item" href="{{ clinical_trials_status_url }}">
                         Clinical Trials Status
                     </a>
+                    {% endif %}
+
                     <a class="item" href="{{ cimac_biofx_home_url }}">
                         CIMAC User Home
                     </a>
