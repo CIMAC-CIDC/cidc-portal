@@ -11,6 +11,7 @@ import logging
 
 APP = Flask(__name__)
 APP.config['SECRET_KEY'] = FLASK_SECRET_KEY
+APP.url_map.strict_slashes = False
 
 
 def configure_logging():
