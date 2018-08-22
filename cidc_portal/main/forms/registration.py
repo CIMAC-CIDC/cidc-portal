@@ -7,12 +7,15 @@ from wtforms import validators
 ORGANIZATIONS = [("DFCI", "Dana-Farber Cancer Institute"),
                  ("MDACC", "MD Anderson Cancer Center"),
                  ("MS", "Mount Sinai"),
-                 ("SU", "Stanford University")]
+                 ("SU", "Stanford University"),
+                 ("NCI", "National Cancer Institute")]
 
 CIDC_ROLE = [("CIMAC_UPLOADER", "CIMAC Data Uploader"),
              ("CIMAC_BIOINFO", "CIMAC Bioinformatician"),
              ("CIDC_BIOINFO", "CIDC Bioinformatician"),
-             ("CIDC_DEVELOPER", "CIDC Developer")]
+             ("CIDC_DEVELOPER", "CIDC Developer"),
+             ("NCI_PM", "NCI Project Manager"),
+             ("NCI_SCIENTIFIC_STAFF", "NCI Scientific Staff")]
 
 
 class RegistrationForm(Form):
