@@ -32,6 +32,8 @@ SESSION_TIMEOUT_MINUTES = env.get('SESSION_TIMEOUT', 10)
 
 ALGORITHMS = ["RS256"]
 
+ROLE_LIST = ['registrant', 'reader', 'uploader', 'lead', 'admin', 'developer', 'disabled']
+
 ADMIN_ROLE = "admin"
 CIMAC_BIOFX_ROLE = "uploader"
 REGISTRANT_ROLE = "registrant"
