@@ -9,7 +9,7 @@
     </div>
 
     <div class="ui attached fluid segment">
-        <form method="POST" action="{{ save_url }}" class="ui form">
+        <form method="POST" class="ui form">
             {% include "register_demographics_ro.jinja2" %}
         </form>
 
@@ -53,8 +53,19 @@
 
     <div class="ui attached fluid segment">
         <h4>System Role</h4>
-        {{ retrieved_user_info["role"] }}
 
+        <form method="POST" action="{{ update_role_url }}" class="ui form">
+
+            <input type="hidden" name="user_id" value="{{ retrieved_user_info["_id"] }}" />
+
+            <select name="system_role" >
+                {% for role in role_list %}
+                    <option value="{{ role }}" {% if retrieved_user_info["role"] == role %}selected{% endif %}>{{ role }}</option>
+                {% endfor %}
+            </select>
+            <br /><br />
+            <input type="submit" value="Update" class="ui button"/>
+        </form>
     </div>
 
 {% endblock %}
