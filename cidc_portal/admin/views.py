@@ -2,6 +2,7 @@ from flask import Blueprint
 from flask import render_template
 from flask import session
 from flask import request
+from flask import redirect
 
 from cidc_portal.auth.wrapper import requires_login, requires_roles
 
@@ -11,10 +12,14 @@ from cidc_portal.main.services.admin import fetch_users
 from cidc_portal.main.services.trials import fetch_trials
 from cidc_portal.main.services.admin import fetch_users_trials
 from cidc_portal.main.services.admin import fetch_single_user
+from cidc_portal.main.services.admin import change_user_role
 
 from cidc_portal.main.forms.registration import RegistrationForm
 
+from cidc_portal.main.services.utils import url_for_with_prefix
+
 from constants import ADMIN_ROLE
+from constants import ROLE_LIST
 
 admin_bp = Blueprint('admin',
                        __name__,
@@ -58,4 +63,18 @@ def user_info():
     return render_template('admin_user_info.jinja2',
                            retrieved_user_info=retrieved_user_info,
                            register_form=register_form,
-                           users_trials=users_trials)
+                           users_trials=users_trials["_items"],
+                           role_list=ROLE_LIST,
+                           update_role_url=url_for_with_prefix("/admin/update_role"))
+
+
+@admin_bp.route('/admin/update_role', methods=['POST'])
+@requires_login()
+@requires_roles([ADMIN_ROLE])
+def update_role():
+    user_id = request.form.get('user_id')
+    new_role = request.form.get("system_role")
+
+    change_user_role(session["jwt_token"], user_id, new_role)
+
+    return redirect('/admin/user_info?user_id=%s' % user_id)

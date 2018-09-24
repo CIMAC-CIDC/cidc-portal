@@ -1,8 +1,13 @@
 import json
 import deprecation
+import logging
+
 from cidc_utils.requests import SmartFetch
+from typing import List
 
 from constants import EVE_URL
+from constants import ROLE_LIST
+
 EVE_FETCHER = SmartFetch(EVE_URL)
 
 
@@ -62,6 +67,7 @@ def fetch_users_trials(jwt: str, selected_user: str) -> dict:
     """
     trial_params = {'collaborators': selected_user}
     endpoint_with_query = "trials?where=%s" % (json.dumps(trial_params))
+
     trials_response = EVE_FETCHER.get(token=jwt, endpoint=endpoint_with_query)
 
     return trials_response.json()
@@ -109,7 +115,7 @@ def add_user_to_trial(jwt: str, trial_id: str, user_ids: List[str]) -> bool:
         return False
 
 
-def change_user_role(jwt: str, role: str) -> bool:
+def change_user_role(jwt: str, user_id: str, role: str) -> bool:
     """
     Changes the role of the designated user to the specified role.
 
@@ -122,18 +128,20 @@ def change_user_role(jwt: str, role: str) -> bool:
         bool -- True if change works, else false.
     """
     #  Check if the role is a valid role.
-    if role not in ['registrant', 'reader', 'uploader', 'lead', 'admin', 'developer']:
-        log = 'Supplied role, %, is not a valid role' % role
-        logging.warning(
+    if role not in ROLE_LIST:
+        log = 'Supplied role % is not a valid role' % role
+        logging.warning({
             'message': log,
             'category': 'WARNING-PORTAL-ACCOUNTS'
-        )
+        })
         return
 
-    user_response = EVE_FETCHER.get(token=jwt, endpoint='accounts_update')
-    user_info = user_response.json()['_items'][0]
-    headers = {'If-Match': user_info['_etag']}
-    endpoint = 'accounts_update/%s' % user_info["_id"]
+    endpoint_with_query = 'accounts/%s' % user_id
+    user_response = EVE_FETCHER.get(token=jwt, endpoint=endpoint_with_query)
+
+    user_info = user_response.json()
+    headers = {'If-Match': user_info['_etag'], 'X-HTTP-Method-Override': 'PATCH'}
+    endpoint = 'accounts/%s' % user_id
     update = {'role': role}
 
     try:
