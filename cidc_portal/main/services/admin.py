@@ -96,7 +96,7 @@ def add_user_to_trial(jwt: str, trial_id: str, user_ids: List[str]) -> bool:
 
     try:
         EVE_FETCHER.post(
-                payload=payload,
+                json=payload,
                 headers={
                     "If-Match": trial_etag,
                     "X-HTTP-Method-Override": "PATCH"
