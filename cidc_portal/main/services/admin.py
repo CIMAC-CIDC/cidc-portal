@@ -1,9 +1,10 @@
 import json
-import deprecation
 import logging
+from typing import List
+import deprecation
 
 from cidc_utils.requests import SmartFetch
-from typing import List
+
 
 from constants import EVE_URL
 from constants import ROLE_LIST
@@ -18,7 +19,7 @@ def fetch_users(jwt: str) -> dict:
     :param jwt: Users JWT
     :return: Dict of all users in system.
     """
-    users_response = EVE_FETCHER.get(token=jwt, endpoint='accounts')
+    users_response = EVE_FETCHER.get(token=jwt, endpoint="accounts")
     user_list = users_response.json()["_items"]
 
     return user_list
@@ -50,10 +51,8 @@ def user_fetch(jwt: str, user_ids: List[str]) -> dict:
     Returns:
         dict -- Account records.
     """
-    query = {
-        '$in': user_ids
-    }
-    endpoint_with_query = 'accounts/?where=%s' % (json.dumps(query))
+    query = {"$in": user_ids}
+    endpoint_with_query = "accounts/?where=%s" % (json.dumps(query))
     return EVE_FETCHER.get(token=jwt, endpoint=endpoint_with_query).json()
 
 
@@ -65,7 +64,7 @@ def fetch_users_trials(jwt: str, selected_user: str) -> dict:
     :param selected_user: Username of the user whose trials you want to retrieve
     :return:
     """
-    trial_params = {'collaborators': selected_user}
+    trial_params = {"collaborators": selected_user}
     endpoint_with_query = "trials?where=%s" % (json.dumps(trial_params))
 
     trials_response = EVE_FETCHER.get(token=jwt, endpoint=endpoint_with_query)
@@ -86,29 +85,34 @@ def add_user_to_trial(jwt: str, trial_id: str, user_ids: List[str]) -> bool:
         bool -- True if addition is successful, else false.
     """
     # Get users emails
-    user_records = user_fetch(jwt, user_ids)['_items']
-    emails = [user['e-mail'] for user in user_records]
+    user_records = user_fetch(jwt, user_ids)["_items"]
+    emails = [user["e-mail"] for user in user_records]
 
-    payload = {
-        '$push': {
-            'collaborators': {
-                '$each': emails
+    trial_query = "trials/%s" % trial_id
+    trial_info = EVE_FETCHER.get(token=jwt, endpoint=trial_query).json()
+    trial_etag = trial_info["_etag"]
+    trial_collabs = trial_info["collaborators"]
+
+    updated_collabs = set(emails + trial_collabs)
+
+    if len(updated_collabs) == len(trial_collabs):
+        logging.warning(
+            {
+                "message": "Warning! Updated collaborators list is identical to current list."
+                "Operation not performed.",
+                "category": "WARNING-PORTAL-FAIR-UPDATE-COLLABORATORS",
             }
-        }
-    }
+        )
+        return False
 
-    trial_query = 'trials/%s' % trial_id
-    trial_etag = EVE_FETCHER.get(token=jwt, endpoint=trial_query).json()['_etag']
+    payload = {"$set": {"collaborators": updated_collabs}}
 
     try:
         EVE_FETCHER.post(
-                payload=payload,
-                headers={
-                    "If-Match": trial_etag,
-                    "X-HTTP-Method-Override": "PATCH"
-                },
-                token=jwt,
-                endpoint=trial_query
+            json=payload,
+            headers={"If-Match": trial_etag, "X-HTTP-Method-Override": "PATCH"},
+            token=jwt,
+            endpoint=trial_query,
         )
         return True
     except RuntimeError:
@@ -129,28 +133,20 @@ def change_user_role(jwt: str, user_id: str, role: str) -> bool:
     """
     #  Check if the role is a valid role.
     if role not in ROLE_LIST:
-        log = 'Supplied role % is not a valid role' % role
-        logging.warning({
-            'message': log,
-            'category': 'WARNING-PORTAL-ACCOUNTS'
-        })
+        log = "Supplied role % is not a valid role" % role
+        logging.warning({"message": log, "category": "WARNING-PORTAL-ACCOUNTS"})
         return
 
-    endpoint_with_query = 'accounts/%s' % user_id
+    endpoint_with_query = "accounts/%s" % user_id
     user_response = EVE_FETCHER.get(token=jwt, endpoint=endpoint_with_query)
 
     user_info = user_response.json()
-    headers = {'If-Match': user_info['_etag'], 'X-HTTP-Method-Override': 'PATCH'}
-    endpoint = 'accounts/%s' % user_id
-    update = {'role': role}
+    headers = {"If-Match": user_info["_etag"], "X-HTTP-Method-Override": "PATCH"}
+    endpoint = "accounts/%s" % user_id
+    update = {"role": role}
 
     try:
-        EVE_FETCHER.patch(
-            endpoint=endpoint,
-            token=jwt,
-            headers=headers,
-            json=update
-        )
+        EVE_FETCHER.patch(endpoint=endpoint, token=jwt, headers=headers, json=update)
         return True
     except RuntimeError:
         return False
