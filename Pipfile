@@ -4,18 +4,20 @@ verify_ssl = true
 name = "pypi"
 
 [dev-packages]
+pylint = "*"
 
 [packages]
-flask = "*"
-authlib = "*"
+Flask = "*"
+Authlib = "*"
 python-dotenv = "*"
 python-jose = "*"
 cidc_utils = {git = "https://github.com/dfci/cidc-utils"}
 nose = "*"
-wtforms = "*"
+WTForms = "*"
 python-json-logger = "*"
 sendgrid = "*"
 deprecation = "*"
+black = "*"
 
 [requires]
 python_version = "3.6"
