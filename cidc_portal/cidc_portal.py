@@ -10,7 +10,7 @@ from cidc_utils.loghandler import StackdriverJsonFormatter
 import logging
 
 APP = Flask(__name__)
-APP.config['SECRET_KEY'] = FLASK_SECRET_KEY
+APP.config["SECRET_KEY"] = FLASK_SECRET_KEY
 APP.url_map.strict_slashes = False
 
 
@@ -20,14 +20,11 @@ def configure_logging():
     """
     # Configure Stackdriver logging.
     logger = logging.getLogger()
-    logger.setLevel('INFO')
+    logger.setLevel("INFO")
     log_handler = logging.StreamHandler()
     log_handler.setFormatter(StackdriverJsonFormatter())
     logger.addHandler(log_handler)
-    logging.info({
-        'message': 'LOGGER CONFIGURED',
-        'category': 'INFO-EVE-LOGGING'
-    })
+    logging.info({"message": "LOGGER CONFIGURED", "category": "INFO-EVE-LOGGING"})
 
 
 @APP.before_request

@@ -52,9 +52,7 @@ def user_fetch(jwt: str, user_ids: List[str]) -> dict:
         dict -- Account records.
     """
 
-    query = {
-        '$in': user_ids
-    }
+    query = {"$in": user_ids}
     endpoint_with_query = 'accounts/?where={"_id":%s}' % (json.dumps(query))
 
     return EVE_FETCHER.get(token=jwt, endpoint=endpoint_with_query).json()
@@ -117,7 +115,6 @@ def add_user_to_trial(jwt: str, trial_id: str, user_ids: List[str]) -> bool:
             headers={"If-Match": trial_etag, "X-HTTP-Method-Override": "PATCH"},
             token=jwt,
             endpoint=trial_query,
-
         )
         return True
     except RuntimeError:
@@ -161,10 +158,12 @@ def remove_user_from_trial(jwt: str, trial_id: str, user_ids: List[str]) -> bool
     try:
         EVE_FETCHER.post(
             json=payload,
-            headers={"If-Match": trial_info["_etag"], "X-HTTP-Method-Override": "PATCH"},
+            headers={
+                "If-Match": trial_info["_etag"],
+                "X-HTTP-Method-Override": "PATCH",
+            },
             token=jwt,
             endpoint=trial_query,
-
         )
         return True
     except RuntimeError:

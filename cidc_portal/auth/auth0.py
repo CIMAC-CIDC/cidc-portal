@@ -13,7 +13,7 @@ from constants import (
     AUTH0_DOMAIN,
     AUTH0_CALLBACK_URL,
     AUTH0_AUDIENCE,
-    ALGORITHMS
+    ALGORITHMS,
 )
 
 
@@ -22,23 +22,22 @@ def establish_login_auth(app):
     oauth = OAuth(app)
 
     auth0 = oauth.register(
-        'auth0',
+        "auth0",
         client_id=AUTH0_CLIENT_ID,
         client_secret=AUTH0_CLIENT_SECRET,
-        api_base_url='https://%s/' % AUTH0_DOMAIN,
-        access_token_url='https://%s/oauth/token' % AUTH0_DOMAIN,
-        authorize_url='https://%s/authorize' % AUTH0_DOMAIN,
-        client_kwargs={
-            'scope': 'openid profile email',
-        },
+        api_base_url="https://%s/" % AUTH0_DOMAIN,
+        access_token_url="https://%s/oauth/token" % AUTH0_DOMAIN,
+        authorize_url="https://%s/authorize" % AUTH0_DOMAIN,
+        client_kwargs={"scope": "openid profile email"},
     )
 
     return auth0
 
 
 def get_auth0_login(login_auth):
-    return login_auth.authorize_redirect(redirect_uri=AUTH0_CALLBACK_URL,
-                                         audience=AUTH0_AUDIENCE)
+    return login_auth.authorize_redirect(
+        redirect_uri=AUTH0_CALLBACK_URL, audience=AUTH0_AUDIENCE
+    )
 
 
 def callback_handling(login_auth):
@@ -51,7 +50,6 @@ def callback_handling(login_auth):
     return access_tokens["id_token"], payload
 
 
-
 # TODO: This is all repeated from ingestion-api
 # Format error response and append status code.
 class AuthError(Exception):
@@ -60,6 +58,7 @@ class AuthError(Exception):
     Arguments:
         Exception {[type]} -- [description]
     """
+
     def __init__(self, error, status_code):
         self.error = error
         self.status_code = status_code
@@ -76,7 +75,7 @@ def get_rsa_key(token):
         print(err)
 
     if not jwks:
-        print('no jwks')
+        print("no jwks")
         return False
 
     rsa_key = {}
@@ -87,7 +86,7 @@ def get_rsa_key(token):
                 "kid": key["kid"],
                 "use": key["use"],
                 "n": key["n"],
-                "e": key["e"]
+                "e": key["e"],
             }
 
     return rsa_key
@@ -100,17 +99,11 @@ def token_auth(token):
 
     if not token:
         raise AuthError(
-            {
-                "code": "token_missing",
-                "description": "Token was missing in callback"
-            },
-            401
+            {"code": "token_missing", "description": "Token was missing in callback"},
+            401,
         )
 
-    logging.info({
-        'message': "Getting RSA Key",
-        'category': 'FAIR-PORTAL-RSAKEY'
-    })
+    logging.info({"message": "Getting RSA Key", "category": "FAIR-PORTAL-RSAKEY"})
 
     rsa_key = get_rsa_key(token)
 
@@ -121,34 +114,30 @@ def token_auth(token):
                 rsa_key,
                 algorithms=ALGORITHMS,
                 audience=AUTH0_CLIENT_ID,
-                issuer="https://"+AUTH0_DOMAIN+"/"
+                issuer="https://" + AUTH0_DOMAIN + "/",
             )
         except jwt.ExpiredSignatureError:
-            print('Expired Signature Error')
+            print("Expired Signature Error")
             raise AuthError(
-                {
-                    "code": "token_expired",
-                    "description": "token is expired"
-                },
-                401
+                {"code": "token_expired", "description": "token is expired"}, 401
             )
         except jwt.JWTClaimsError as claims:
             print(claims)
             raise AuthError(
                 {
                     "code": "invalid_claims",
-                    "description": "incorrect claims, please check the audience and issuer"
+                    "description": "incorrect claims, please check the audience and issuer",
                 },
-                401
+                401,
             )
         except Exception as err:
             print(err)
             raise AuthError(
                 {
                     "code": "invalid_header",
-                    "description": "Unable to parse authentication token."
+                    "description": "Unable to parse authentication token.",
                 },
-                401
+                401,
             )
 
         _request_ctx_stack.top.current_user = payload
@@ -156,9 +145,5 @@ def token_auth(token):
         return payload
 
     raise AuthError(
-        {
-            "code": "invalid_header",
-            "description": "Unable to find appropriate key"
-        },
-        401
+        {"code": "invalid_header", "description": "Unable to find appropriate key"}, 401
     )

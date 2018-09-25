@@ -11,9 +11,7 @@ from cidc_portal.main.services.utils import base_user_info
 from constants import ADMIN_ROLE
 from constants import CIMAC_BIOFX_ROLE
 
-cimac_biofx_bp = Blueprint('cimac_biofx',
-                           __name__,
-                           template_folder='templates')
+cimac_biofx_bp = Blueprint("cimac_biofx", __name__, template_folder="templates")
 
 
 @cimac_biofx_bp.context_processor
@@ -21,7 +19,7 @@ def build_main_context():
     return base_user_info(session)
 
 
-@cimac_biofx_bp.route('/cimac_biofx/home', methods=['GET'])
+@cimac_biofx_bp.route("/cimac_biofx/home", methods=["GET"])
 @requires_login()
 @requires_roles([CIMAC_BIOFX_ROLE, ADMIN_ROLE])
 def home():
@@ -29,7 +27,6 @@ def home():
 
     user_home_data = get_cimac_biofox_user_home_data(session["jwt_token"])
 
-    return render_template('home.jinja2',
-                           jwt=session["jwt_token"],
-                           user_home_data=user_home_data)
-
+    return render_template(
+        "home.jinja2", jwt=session["jwt_token"], user_home_data=user_home_data
+    )
