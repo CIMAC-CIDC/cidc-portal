@@ -13,6 +13,8 @@ from cidc_portal.main.services.trials import fetch_trials
 from cidc_portal.main.services.admin import fetch_users_trials
 from cidc_portal.main.services.admin import fetch_single_user
 from cidc_portal.main.services.admin import change_user_role
+from cidc_portal.main.services.admin import add_user_to_trial
+from cidc_portal.main.services.admin import remove_user_from_trial
 
 from cidc_portal.main.forms.registration import RegistrationForm
 
@@ -58,14 +60,22 @@ def user_info():
                                      last_n=retrieved_user_info.get("last_n"),
                                      cidc_role=retrieved_user_info.get("position_description"))
 
-    users_trials = fetch_users_trials(session["jwt_token"], retrieved_user_info["e-mail"])
+    users_trials = fetch_users_trials(session["jwt_token"], retrieved_user_info["e-mail"])["_items"]
+    trials_user_not_in = fetch_trials(session["jwt_token"])
+
+    # Create a list of trials that the user is not in.
+    for user_trial in users_trials:
+        trials_user_not_in = [trial for trial in trials_user_not_in if trial.get('_id') != user_trial["_id"]]
 
     return render_template('admin_user_info.jinja2',
                            retrieved_user_info=retrieved_user_info,
                            register_form=register_form,
-                           users_trials=users_trials["_items"],
+                           trials_user_not_in=trials_user_not_in,
+                           users_trials=users_trials,
                            role_list=ROLE_LIST,
-                           update_role_url=url_for_with_prefix("/admin/update_role"))
+                           update_role_url=url_for_with_prefix("/admin/update_role"),
+                           add_user_to_trial_url=url_for_with_prefix("/admin/add_user_trial"),
+                           remove_user_from_trial_url=url_for_with_prefix("/admin/remove_user_from_trial"),)
 
 
 @admin_bp.route('/admin/update_role', methods=['POST'])
@@ -76,5 +86,29 @@ def update_role():
     new_role = request.form.get("system_role")
 
     change_user_role(session["jwt_token"], user_id, new_role)
+
+    return redirect('/admin/user_info?user_id=%s' % user_id)
+
+
+@admin_bp.route('/admin/add_user_trial', methods=['POST'])
+@requires_login()
+@requires_roles([ADMIN_ROLE])
+def add_user_trial():
+    user_id = request.form.get('user_id')
+    new_trial = request.form.get("add_user_to_trial")
+
+    add_user_to_trial(session["jwt_token"], new_trial, [user_id])
+
+    return redirect('/admin/user_info?user_id=%s' % user_id)
+
+
+@admin_bp.route('/admin/remove_user_from_trial', methods=['POST'])
+@requires_login()
+@requires_roles([ADMIN_ROLE])
+def remove_user_trial():
+    user_id = request.form.get('user_id')
+    new_trial = request.form.get("remove_user_from_trial")
+
+    remove_user_from_trial(session["jwt_token"], new_trial, [user_id])
 
     return redirect('/admin/user_info?user_id=%s' % user_id)
