@@ -25,9 +25,7 @@ from .services.email import send_mail
 
 from .forms.registration import RegistrationForm
 
-main_bp = Blueprint('main',
-                    __name__,
-                    template_folder='templates')
+main_bp = Blueprint("main", __name__, template_folder="templates")
 
 auth0 = establish_login_auth(current_app)
 
@@ -37,56 +35,47 @@ def build_main_context():
     return base_user_info(session)
 
 
-@main_bp.route('/privacy', methods=['GET'])
+@main_bp.route("/privacy", methods=["GET"])
 def privacy():
-    return render_template('privacy.jinja2')
+    return render_template("privacy.jinja2")
 
 
 @main_bp.app_errorhandler(500)
 def error_500_page(err):
-    logging.error({
-        'message': err,
-        'category': 'ERROR-500-PORTAL'
-    })
-    return render_template('500.jinja2')
+    logging.error({"message": err, "category": "ERROR-500-PORTAL"})
+    return render_template("500.jinja2")
 
 
 @main_bp.app_errorhandler(404)
 def error_404_page(err):
-    logging.error({
-        'message': err,
-        'category': 'ERROR-404-PORTAL'
-    })
-    return render_template('404.jinja2')
+    logging.error({"message": err, "category": "ERROR-404-PORTAL"})
+    return render_template("404.jinja2")
 
 
 @main_bp.app_errorhandler(403)
 def error_403_page(err):
-    logging.error({
-        'message': err,
-        'category': 'ERROR-403-PORTAL'
-    })
-    return render_template('403.jinja2')
+    logging.error({"message": err, "category": "ERROR-403-PORTAL"})
+    return render_template("403.jinja2")
 
 
-@main_bp.route('/logout', methods=['GET'])
+@main_bp.route("/logout", methods=["GET"])
 def logout():
 
-    if 'jwt_token' in session:
-        del session['jwt_token']
+    if "jwt_token" in session:
+        del session["jwt_token"]
 
     session.clear()
 
     return redirect(url_for_with_prefix("/login"))
 
 
-@main_bp.route('/login', methods=['GET'])
+@main_bp.route("/login", methods=["GET"])
 def login():
 
     return get_auth0_login(auth0)
 
 
-@main_bp.route('/callback', methods=['GET'])
+@main_bp.route("/callback", methods=["GET"])
 def callback_controller():
 
     session["jwt_token"], user_payload = callback_handling(auth0)
@@ -98,7 +87,7 @@ def callback_controller():
     return redirect(url_for_with_prefix("/"))
 
 
-@main_bp.route('/', methods=['GET'])
+@main_bp.route("/", methods=["GET"])
 def index():
     if "jwt_token" in session and session["jwt_token"] is not None:
 
@@ -125,7 +114,7 @@ def index():
     return redirect(url_for_with_prefix("/login"))
 
 
-@main_bp.route('/register', methods=['GET', 'POST'])
+@main_bp.route("/register", methods=["GET", "POST"])
 @requires_login()
 @requires_roles([REGISTRANT_ROLE, ADMIN_ROLE])
 def register():
@@ -141,26 +130,33 @@ def register():
     register_form = RegistrationForm(request.form)
 
     # Form submission method.
-    if request.method == 'POST':
+    if request.method == "POST":
         if register_form.validate():
             update_user_info(session["jwt_token"], register_form)
 
-            send_mail("[CIDC][AUTOMATED] USER SIGNUP",
-                      "A new user has signed up for the CIDC Portal (%s)" % register_form.contact_email.data,
-                      CIDC_MAILING_LIST)
+            send_mail(
+                "[CIDC][AUTOMATED] USER SIGNUP",
+                "A new user has signed up for the CIDC Portal (%s)"
+                % register_form.contact_email.data,
+                CIDC_MAILING_LIST,
+            )
 
             return redirect(url_for_with_prefix("/request_pending"))
         else:
 
-            render_template('register.jinja2',
-                            save_url=url_for_with_prefix("/register"),
-                            register_form=register_form)
-    return render_template('register.jinja2',
-                           save_url=url_for_with_prefix("/register"),
-                           register_form=register_form)
+            render_template(
+                "register.jinja2",
+                save_url=url_for_with_prefix("/register"),
+                register_form=register_form,
+            )
+    return render_template(
+        "register.jinja2",
+        save_url=url_for_with_prefix("/register"),
+        register_form=register_form,
+    )
 
 
-@main_bp.route('/request_pending', methods=['GET'])
+@main_bp.route("/request_pending", methods=["GET"])
 @requires_login()
 def request_pending():
     session["cidc_user_info"] = get_user_info(session["jwt_token"])
@@ -176,4 +172,4 @@ def request_pending():
     if not session["cidc_user_info"]["registered"]:
         return redirect(url_for_with_prefix("/register"))
 
-    return render_template('request-pending.jinja2')
+    return render_template("request-pending.jinja2")
