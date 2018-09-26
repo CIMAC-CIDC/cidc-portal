@@ -93,7 +93,7 @@ def update_role():
 
     change_user_role(session["jwt_token"], user_id, new_role)
 
-    return redirect("/admin/user_info?user_id=%s" % user_id)
+    return redirect(url_for_with_prefix("/admin/user_info?user_id=%s" % user_id))
 
 
 @admin_bp.route("/admin/add_user_trial", methods=["POST"])
@@ -105,7 +105,7 @@ def add_user_trial():
 
     add_user_to_trial(session["jwt_token"], new_trial, [user_id])
 
-    return redirect("/admin/user_info?user_id=%s" % user_id)
+    return redirect(url_for_with_prefix("/admin/user_info?user_id=%s" % user_id))
 
 
 @admin_bp.route("/admin/remove_user_from_trial", methods=["POST"])
@@ -117,4 +117,4 @@ def remove_user_trial():
 
     remove_user_from_trial(session["jwt_token"], new_trial, [user_id])
 
-    return redirect("/admin/user_info?user_id=%s" % user_id)
+    return redirect(url_for_with_prefix("/admin/user_info?user_id=%s" % user_id))
