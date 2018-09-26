@@ -88,7 +88,7 @@ def add_user_to_trial(jwt: str, trial_id: str, user_ids: List[str]) -> bool:
     """
     # Get users emails
     user_records = user_fetch(jwt, user_ids)["_items"]
-    emails = [user["e-mail"] for user in user_records]
+    emails = [user["email"] for user in user_records]
 
     trial_query = "trials/%s" % trial_id
     trial_info = EVE_FETCHER.get(token=jwt, endpoint=trial_query).json()
@@ -135,7 +135,7 @@ def remove_user_from_trial(jwt: str, trial_id: str, user_ids: List[str]) -> bool
     """
     # Get users emails
     user_records = user_fetch(jwt, user_ids)["_items"]
-    emails = [user["e-mail"] for user in user_records]
+    emails = [user["email"] for user in user_records]
 
     trial_query = "trials/%s" % trial_id
     trial_info = EVE_FETCHER.get(token=jwt, endpoint=trial_query).json()

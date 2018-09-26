@@ -25,7 +25,7 @@ CIDC_ROLE = [
 class RegistrationForm(Form):
     email = StringField("Username")
     contact_email = StringField(
-        "Preferred contact e-mail", [validators.InputRequired(), validators.Email()]
+        "Preferred contact email", [validators.InputRequired(), validators.Email()]
     )
 
     organization = SelectField("Organization", choices=ORGANIZATIONS)

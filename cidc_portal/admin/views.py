@@ -50,7 +50,7 @@ def user_info():
     retrieved_user_info = fetch_single_user(session["jwt_token"], selected_user)
 
     register_form = RegistrationForm(
-        email=retrieved_user_info["e-mail"],
+        email=retrieved_user_info["email"],
         contact_email=retrieved_user_info.get("preferred_contact_email"),
         organization=retrieved_user_info.get("organization"),
         first_n=retrieved_user_info.get("first_n"),
@@ -59,7 +59,7 @@ def user_info():
     )
 
     users_trials = fetch_users_trials(
-        session["jwt_token"], retrieved_user_info["e-mail"]
+        session["jwt_token"], retrieved_user_info["email"]
     )["_items"]
     trials_user_not_in = fetch_trials(session["jwt_token"])
 

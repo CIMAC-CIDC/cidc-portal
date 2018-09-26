@@ -8,11 +8,11 @@ from sendgrid.helpers.mail import *
 
 def send_mail(subject: str, message_text: str, to_email: str) -> bool:
     """
-    Sends an e-mail via Sendgrid. Configure API_KEY via constants.
+    Sends an email via Sendgrid. Configure API_KEY via constants.
 
     :param subject:
     :param message_text:
-    :param to_email: Single address where the e-mail will be sent.
+    :param to_email: Single address where the email will be sent.
     :return:
     """
     sg = sendgrid.SendGridAPIClient(apikey=SENDGRID_API_KEY)
