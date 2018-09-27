@@ -1,3 +1,6 @@
+"""
+Defines functions for administrators to manage users.
+"""
 import json
 import logging
 from typing import List
