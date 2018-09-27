@@ -17,8 +17,8 @@ spec:
     volumeMounts:
     - mountPath: /var/run/docker.sock
       name: docker-volume
-  - name: helm
-    image: lachlanevenson/k8s-helm
+  - name: gcloud
+    image: gcr.io/cidc-dfci/gcloud-helm:latest
     command:
     - cat
     tty: true
@@ -31,7 +31,6 @@ spec:
   }
   environment {
       GOOGLE_APPLICATION_CREDENTIALS = credentials('google-service-account')
-      deploy = "${UUID.randomUUID().toString()}"
   }
   stages {
     stage('Checkout SCM') {
@@ -82,10 +81,11 @@ spec:
           branch 'staging'
       }
       steps {
-        container('helm') {
+        container('gcloud') {
+          sh 'gcloud container clusters get-credentials cidc-cluster-staging --zone us-east1-c --project cidc-dfci'
           sh 'helm init --service-account tiller'
           sh 'helm repo add cidc "http://${CIDC_CHARTMUSEUM_SERVICE_HOST}:${CIDC_CHARTMUSEUM_SERVICE_PORT}" '
-          sh 'helm upgrade portal cidc/portal --recreate-pods --version=0.1.0-staging --set deploy=${deploy}  --set image.tag=staging'
+          sh 'helm upgrade portal cidc/portal --recreate-pods --version=0.1.0-staging --set imageSHA=$(gcloud container images list-tags --format="get(digest)" --filter="tags:staging" gcr.io/cidc-dfci/portal)  --set image.tag=staging'
         }
       }
     }
