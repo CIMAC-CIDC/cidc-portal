@@ -54,8 +54,10 @@ def user_fetch(jwt: str, user_ids: List[str]) -> dict:
     Returns:
         dict -- Account records.
     """
+
     query = {"$in": user_ids}
-    endpoint_with_query = "accounts/?where=%s" % (json.dumps(query))
+    endpoint_with_query = 'accounts/?where={"_id":%s}' % (json.dumps(query))
+
     return EVE_FETCHER.get(token=jwt, endpoint=endpoint_with_query).json()
 
 
@@ -89,7 +91,7 @@ def add_user_to_trial(jwt: str, trial_id: str, user_ids: List[str]) -> bool:
     """
     # Get users emails
     user_records = user_fetch(jwt, user_ids)["_items"]
-    emails = [user["e-mail"] for user in user_records]
+    emails = [user["email"] for user in user_records]
 
     trial_query = "trials/%s" % trial_id
     trial_info = EVE_FETCHER.get(token=jwt, endpoint=trial_query).json()
@@ -108,12 +110,61 @@ def add_user_to_trial(jwt: str, trial_id: str, user_ids: List[str]) -> bool:
         )
         return False
 
-    payload = {"$set": {"collaborators": updated_collabs}}
+    payload = {"collaborators": list(updated_collabs)}
 
     try:
         EVE_FETCHER.post(
             json=payload,
             headers={"If-Match": trial_etag, "X-HTTP-Method-Override": "PATCH"},
+            token=jwt,
+            endpoint=trial_query,
+        )
+        return True
+    except RuntimeError:
+        return False
+
+
+def remove_user_from_trial(jwt: str, trial_id: str, user_ids: List[str]) -> bool:
+    """
+    Removed a user from trial.
+
+    Arguments:
+        jwt {str} -- [description]
+        trial_id {str} -- [description]
+        user_ids {List[str]} -- [description]
+
+    Returns:
+        bool -- True if addition is successful, else false.
+    """
+    # Get users emails
+    user_records = user_fetch(jwt, user_ids)["_items"]
+    emails = [user["email"] for user in user_records]
+
+    trial_query = "trials/%s" % trial_id
+    trial_info = EVE_FETCHER.get(token=jwt, endpoint=trial_query).json()
+    trial_collabs = trial_info["collaborators"]
+
+    updated_collabs = set(trial_collabs) - set(emails)
+
+    if len(updated_collabs) == len(trial_collabs):
+        logging.warning(
+            {
+                "message": "Warning! No one was removed from collaborator list."
+                "Operation not performed.",
+                "category": "WARNING-PORTAL-FAIR-UPDATE-COLLABORATORS",
+            }
+        )
+        return False
+
+    payload = {"collaborators": list(updated_collabs)}
+
+    try:
+        EVE_FETCHER.post(
+            json=payload,
+            headers={
+                "If-Match": trial_info["_etag"],
+                "X-HTTP-Method-Override": "PATCH",
+            },
             token=jwt,
             endpoint=trial_query,
         )
