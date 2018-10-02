@@ -1,0 +1,198 @@
+{% extends "base_header.jinja2" %}
+
+{% block content %}
+
+    <style type="text/css">
+        .console_text {
+            font-family: Monaco;
+        }
+    </style>
+
+    <script type="application/javascript">
+        function copy_jwt() {
+            var copyText = document.getElementById("jwt");
+            copyText.select();
+            document.execCommand("copy");
+        }
+    </script>
+
+    <div class="ui segments">
+        <div class="ui message attached">
+            <h3 class="ui header">Instructions for installing CIDC-CLI</h3>
+        </div>
+        <div class="ui segment">
+
+            The CIDC-CLI is used to interact with the CIDC environment. The following instructions will install
+            the CLI for you in a python virtual environment.<br/><br/>
+
+            <div class="ui segments">
+                <div class="ui segment">
+                    <h4>1. Clone the CLI repository (<a href="https://github.com/dfci/cidc-cli">https://github.com/dfci/cidc-cli</a>)
+                    </h4>
+                    <div class="ui segments">
+                        <div class="ui black segment inverted console_text">
+                            $ git clone https://github.com/dfci/cidc-cli
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui segment">
+                    <h4>2. You'll need Python 3.6 installed on your system. (<a href="https://www.python.org/">https://www.python.org/</a>)
+                    </h4>
+                </div>
+
+                <div class="ui segment">
+                    <h4>3. If you don't have pipenv installed, you can install it with</h4>
+                    <div class="ui segments">
+                        <div class="ui black segment inverted console_text">
+                            $ pip install pipenv
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui segment">
+                    <h4>4. Now navigate into the directory of the cidc-cli tool source you cloned above</h4>
+
+                    <div class="ui segments">
+                        <div class="ui black segment inverted console_text">
+                            $ cd cidc-cli
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui segment">
+                    <h4>5. You'll need to install the command line tool to your system, the easiest way is to enter the
+                        pipenv shell</h4>
+
+                    <div class="ui segments">
+                        <div class="ui black segment inverted console_text">
+                            $ pipenv shell
+                        </div>
+                    </div>
+
+                </div>
+                <div class="ui segment">
+                    <h4>6. Once inside the shell, run the following. This should install the CLI and add it to your
+                        virtual
+                        environments path.</h4>
+
+                    <div class="ui segments">
+                        <div class="ui black segment inverted console_text">
+                            $ pip3 install .
+                        </div>
+                    </div>
+                </div>
+                <div class="ui segment">
+                    <h4>7. Test that the CLI starts with the following</h4>
+
+                    <div class="ui segments">
+                        <div class="ui black segment inverted console_text">
+                            $ cidc_cli
+                        </div>
+                    </div>
+
+                    <h4>Expected Output</h4>
+                    <div class="ui segments">
+                        <div class="ui black segment inverted console_text">
+                            Welcome to the CIDC CLI Tool,<br/>
+                            you are about to access a system which contains private medical data protected by <br/>
+                            federal law. Information on system usage may be monitored and recorded, and subject to <br/>
+                            audit. Unauthorized use of this system is strictly prohibited and subject to criminal <br/>
+                            and civil penalties. By using this tool you consent to the monitoring and <br/>
+                            recording of your actions on this system. <br/>
+
+                            Do you agree to the above terms and conditions? <br/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui segments">
+        <div class="ui message attached">
+            <h3 class="ui header">Uploading data to CIDC</h3>
+        </div>
+        <div class="ui segment">
+            <h4>After the above steps are completed you are ready to upload data to CIDC!</h4>
+
+            <div class="ui segments">
+                <div class="ui segment">
+                    <h4>You can log into the CLI via the set of commands below. First start the CLI</h4>
+
+                    <div class="ui segments">
+                        <div class="ui black segment inverted console_text">
+                            $ cidc_cli
+                        </div>
+                    </div>
+
+                    <h4>Expected Output</h4>
+                    <div class="ui segments">
+                        <div class="ui black segment inverted console_text">
+                            ...
+                            Do you agree to the above terms and conditions? <br/>
+                        </div>
+                    </div>
+
+                    <div class="ui horizontal divider">
+                        Next
+                    </div>
+
+                    <h4>Typing yes will act as your agreement to the terms and conditions.</h4>
+
+                    <div class="ui segments">
+                        <div class="ui black segment inverted console_text">
+                            $ yes
+                        </div>
+                    </div>
+
+                    <h4>Expected Output after agreeing to the terms and conditions is a Cmd prompt</h4>
+                    <div class="ui segments">
+                        <div class="ui black segment inverted console_text">
+                            (Cmd)
+                        </div>
+                    </div>
+                    <div class="ui horizontal divider">
+                        Next
+                    </div>
+
+                    <h4>Now you'll use the jwt_login command and paste in your JWT.
+                        You can find your JWT at the bottom of this page.</h4>
+
+                    <div class="ui segments">
+                        <div class="ui black segment inverted console_text">
+                            (Cmd) jwt_login ey927853.......
+                        </div>
+                    </div>
+                    <div class="ui message red">
+                        Your JWT is a long token that represents your identity within the CIDC System, Treat it as you
+                        would a password! Anyone who has your JWT can perform actions as if they were you.<br/><br/>
+                        Do not share your JWT with anyone! We will never ask you to send a JWT over email.<br/><br/>
+                        <button class="ui red button" onclick="$('#jwt_div').toggle();">
+                            Click to reveal the JWT that you will paste in the above command.
+                        </button>
+                        <br/><br/>
+                        <div id="jwt_div" class="ui input" style="display: none;">
+                            <button class="ui blue button" onclick="copy_jwt();">
+                                Copy JWT to Clipboard
+                            </button>
+                            <input id="jwt" type="text" value="{{ jwt }}"/>
+                        </div>
+                    </div>
+                    <div class="ui horizontal divider">
+                        Next
+                    </div>
+                    <h4>The final step to start the upload process is the upload_data command. This will
+                    launch an interactive command line session to walk you through data upload</h4>
+                    <div class="ui segments">
+                        <div class="ui black segment inverted console_text">
+                            (Cmd) upload_data
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+{% endblock %}

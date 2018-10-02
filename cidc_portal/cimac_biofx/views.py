@@ -30,3 +30,25 @@ def home():
     return render_template(
         "home.jinja2", jwt=session["jwt_token"], user_home_data=user_home_data
     )
+
+
+@cimac_biofx_bp.route("/cimac_biofx/cli-install", methods=["GET"])
+@requires_login()
+@requires_roles([CIMAC_BIOFX_ROLE, ADMIN_ROLE])
+def cli_install():
+    session["cidc_user_info"] = get_user_info(session["jwt_token"])
+
+    return render_template(
+        "cli-install.jinja2", jwt=session["jwt_token"]
+    )
+
+
+@cimac_biofx_bp.route("/cimac_biofx/olink-upload", methods=["GET"])
+@requires_login()
+@requires_roles([CIMAC_BIOFX_ROLE, ADMIN_ROLE])
+def olink_upload():
+    session["cidc_user_info"] = get_user_info(session["jwt_token"])
+
+    return render_template(
+        "olink-upload.jinja2", jwt=session["jwt_token"]
+    )
