@@ -24,6 +24,8 @@ def base_user_info(session):
                 user_name=session["cidc_user_info"]["username"],
                 clinical_trials_status_url=url_for_with_prefix("/trials-summary"),
                 cimac_biofx_home_url=url_for_with_prefix("/cimac_biofx/home"),
+                cli_install_url=url_for_with_prefix("/cimac_biofx/cli-install"),
+                olink_upload_url=url_for_with_prefix("/cimac_biofx/olink-upload"),
                 admin_home_url=url_for_with_prefix("/admin/home"),
                 privacy_url=url_for_with_prefix("/privacy"),
                 logout_url=url_for_with_prefix("/logout"),
