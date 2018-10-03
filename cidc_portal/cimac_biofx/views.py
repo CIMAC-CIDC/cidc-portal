@@ -6,6 +6,7 @@ from cidc_portal.auth.wrapper import requires_login, requires_roles
 
 from cidc_portal.main.services.user import get_user_info
 from cidc_portal.main.services.user import get_cimac_biofox_user_home_data
+from cidc_portal.main.services.uploads import get_olink_status
 from cidc_portal.main.services.utils import base_user_info
 
 from constants import ADMIN_ROLE
@@ -29,6 +30,19 @@ def home():
 
     return render_template(
         "home.jinja2", jwt=session["jwt_token"], user_home_data=user_home_data
+    )
+
+
+@cimac_biofx_bp.route("/cimac_biofx/uploads", methods=["GET"])
+@requires_login()
+@requires_roles([CIMAC_BIOFX_ROLE, ADMIN_ROLE])
+def uploads():
+    session["cidc_user_info"] = get_user_info(session["jwt_token"])
+
+    olink_uploads = get_olink_status(session["jwt_token"])
+
+    return render_template(
+        "upload_status.jinja2", jwt=session["jwt_token"], olink_uploads=olink_uploads
     )
 
 
