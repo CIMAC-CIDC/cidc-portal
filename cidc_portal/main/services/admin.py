@@ -4,6 +4,7 @@ Defines functions for administrators to manage users.
 import json
 import logging
 from typing import List
+from flask import session
 import deprecation
 
 from cidc_utils.requests import SmartFetch
@@ -119,6 +120,12 @@ def add_user_to_trial(jwt: str, trial_id: str, user_ids: List[str]) -> bool:
             token=jwt,
             endpoint=trial_query,
         )
+
+        logging.info({
+                "message": "User(s) %s added to trial %s by %s" %
+                           (emails, trial_id, session["cidc_user_info"]["email"]),
+                "category": "INFO-PORTAL-ADD-USER-TRIAL"})
+
         return True
     except RuntimeError:
         return False
@@ -168,6 +175,12 @@ def remove_user_from_trial(jwt: str, trial_id: str, user_ids: List[str]) -> bool
             token=jwt,
             endpoint=trial_query,
         )
+
+        logging.info({
+                "message": "User(s) %s removed from trial %s by %s" %
+                           (emails, trial_id, session["cidc_user_info"]["email"]),
+                "category": "INFO-PORTAL-REMOVE-USER-TRIAL"})
+
         return True
     except RuntimeError:
         return False
@@ -201,6 +214,12 @@ def change_user_role(jwt: str, user_id: str, role: str) -> bool:
 
     try:
         EVE_FETCHER.patch(endpoint=endpoint, token=jwt, headers=headers, json=update)
+
+        logging.info({
+                "message": "User(s) %s role changed to %s by %s" %
+                           (user_info["email"], role, session["cidc_user_info"]["email"]),
+                "category": "INFO-PORTAL-CHANGE-ROLE"})
+
         return True
     except RuntimeError:
         return False
