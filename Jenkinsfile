@@ -83,8 +83,8 @@ spec:
       steps {
         container('gcloud') {
           sh 'gcloud container clusters get-credentials cidc-cluster-staging --zone us-east1-c --project cidc-dfci'
-          sh 'helm init --service-account --tls tiller'
-          sh 'helm repo add --tls cidc "http://${CIDC_CHARTMUSEUM_SERVICE_HOST}:${CIDC_CHARTMUSEUM_SERVICE_PORT}" '
+          sh 'helm init --tls --service-account tiller'
+          sh 'helm repo add cidc "http://${CIDC_CHARTMUSEUM_SERVICE_HOST}:${CIDC_CHARTMUSEUM_SERVICE_PORT}" --tls'
           sh 'helm upgrade portal cidc/portal --tls --recreate-pods --version=0.1.0-staging --set imageSHA=$(gcloud container images list-tags --format="get(digest)" --filter="tags:staging" gcr.io/cidc-dfci/portal)  --set image.tag=staging'
         }
       }
