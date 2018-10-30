@@ -123,7 +123,7 @@ def add_user_to_trial(jwt: str, trial_id: str, user_ids: List[str]) -> bool:
 
         logging.info({
                 "message": "User(s) %s added to trial %s by %s" %
-                           (emails, trial_id, session["cidc_user_info"]["email"]),
+                           (emails, trial_id, session["cidc_user_info"]["username"]),
                 "category": "INFO-PORTAL-ADD-USER-TRIAL"})
 
         return True
@@ -178,7 +178,7 @@ def remove_user_from_trial(jwt: str, trial_id: str, user_ids: List[str]) -> bool
 
         logging.info({
                 "message": "User(s) %s removed from trial %s by %s" %
-                           (emails, trial_id, session["cidc_user_info"]["email"]),
+                           (emails, trial_id, session["cidc_user_info"]["username"]),
                 "category": "INFO-PORTAL-REMOVE-USER-TRIAL"})
 
         return True
@@ -217,7 +217,7 @@ def change_user_role(jwt: str, user_id: str, role: str) -> bool:
 
         logging.info({
                 "message": "User(s) %s role changed to %s by %s" %
-                           (user_info["email"], role, session["cidc_user_info"]["email"]),
+                           (user_info["email"], role, session["cidc_user_info"]["username"]),
                 "category": "INFO-PORTAL-CHANGE-ROLE"})
 
         return True
