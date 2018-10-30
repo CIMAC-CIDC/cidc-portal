@@ -12,6 +12,7 @@
             <th class="sorted descending">File ID</th>
             <th class="sorted descending">File Name</th>
             <th class="sorted descending">Validation Errors</th>
+            <th>Removed Uploaded File</th>
         </tr>
     </thead>
     <tbody>
@@ -28,6 +29,12 @@
                     {% else %}
                         <td class="positive"><i class="icon checkmark"></i> None</td>
                     {% endif %}
+                </td>
+                <td>
+                    <form method="POST" action="{{ remove_uploaded_file_url }}" class="ui form">
+                        <input type="submit" value="Remove" class="ui button red"/>
+                        <input type="hidden" name="data_id" value="{{ upload["id"] }}" />
+                    </form>
                 </td>
             </tr>
         {% endfor %}
