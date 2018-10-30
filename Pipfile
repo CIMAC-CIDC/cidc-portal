@@ -18,6 +18,7 @@ python-json-logger = "*"
 sendgrid = "*"
 deprecation = "*"
 black = "*"
+requests = "*"
 
 [requires]
 python_version = "3.6"
