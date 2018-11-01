@@ -7,65 +7,89 @@
 <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.3.3/dist/semantic.min.js"></script>
 
 <body>
+<div class="ui grid">
+    <div class="row" style="margin-top: 10px;">
+        <div class="one wide column"></div>
+        <div class="fourteen wide column">
+            <div class="ui menu inverted violet">
+
+                {% if user_role == "admin" %}
+                    <a class="item" href="{{ clinical_trials_status_url }}">
+                        Clinical Trials Status
+                    </a>
+                {% endif %}
+
+                <a class="item" href="{{ cimac_biofx_home_url }}">
+                    CIMAC User Home
+                </a>
+
+                <div class="item ui dropdown">
+                    Instructions
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a class="item" href="{{ cli_install_url }}">
+                            CIDC-CLI Install
+                        </a>
+                        <a class="item" href="{{ olink_upload_url }}">
+                            Olink Upload
+                        </a>
+                    </div>
+                </div>
+
+                <a class="item" href="{{ upload_status_url }}">
+                    Upload Status
+                </a>
+
+                {% if user_role == "admin" %}
+                    <a class="item" href="{{ admin_home_url }}">
+                        CIDC Admin Panel
+                    </a>
+                {% endif %}
+
+                <div class="right menu">
+                    <div class="item">
+                        Role: {{ user_role }}
+                    </div>
+                    <div class="item">
+                        Username: {{ user_name }}
+                    </div>
+                    <a class="ui item" href="{{ logout_url }}">
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="one wide column"></div>
+    </div>
+    <div class="row">
+        <div class="two wide column"></div>
+        <div class="ten wide column">
+
+            {% block content %}{% endblock %}
+
+        </div>
+        <div class="four wide column"></div>
+    </div>
+</div>
+<div class="ui footer" style="margin-top: 20px;">
     <div class="ui grid">
         <div class="row" style="margin-top: 10px;">
             <div class="one wide column"></div>
             <div class="fourteen wide column">
+
                 <div class="ui menu inverted violet">
-                    {%  if user_role != "registrant" %}
-                    <a class="item" href="{{ clinical_trials_status_url }}">
-                        Clinical Trials Status
-                    </a>
-                    {% endif %}
-
-                    <a class="item" href="{{ cimac_biofx_home_url }}">
-                        CIMAC User Home
-                    </a>
-
-                    {%  if user_role == "admin" %}
-                        <a class="item" href="{{ admin_home_url }}">
-                            CIDC Admin Panel
-                        </a>
-                    {% endif %}
-
-                    <div class="right menu">
-                        <div class="item">
-                            Role: {{ user_role }}
-                        </div>
-                        <div class="item">
-                            Username: {{ user_name }}
-                        </div>
-                        <a class="ui item" href="{{ logout_url }}">
-                            Logout
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="one wide column"></div>
-        </div>
-        <div class="row">
-            <div class="two wide column"></div>
-            <div class="ten wide column">
-
-                {% block content %}{% endblock %}
-
-            </div>
-            <div class="four wide column"></div>
-        </div>
-    </div>
-    <div class="ui footer" style="margin-top: 20px;">
-        <div class="ui grid">
-            <div class="row" style="margin-top: 10px;">
-                <div class="one wide column"></div>
-                <div class="fourteen wide column">
-
-                    <div class="ui menu inverted violet">
-                        <a class="item" target="_blank" href="{{ privacy_url }}">Privacy and Security Notice</a>
-                    </div>
+                    <a class="item" target="_blank" href="{{ privacy_url }}">Privacy and Security Notice</a>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+<script type="application/javascript">
+    $('.ui.dropdown').dropdown();
+</script>
+
+
 </body>
 
 </html>

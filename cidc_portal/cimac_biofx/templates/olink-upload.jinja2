@@ -1,0 +1,147 @@
+{% extends "base_header.jinja2" %}
+
+{% block content %}
+
+    <style type="text/css">
+        .console_text {
+            font-family: Monaco;
+        }
+    </style>
+
+    <script type="application/javascript">
+        function copy_jwt() {
+            var copyText = document.getElementById("jwt");
+            copyText.select();
+            document.execCommand("copy");
+        }
+    </script>
+
+    <div class="ui segments">
+        <div class="ui message attached">
+            <h3 class="ui header">Before uploading data</h3>
+        </div>
+        <div class="ui segment">
+            <h4>If you haven't already, see our instructions on downloading and installing the CIDC-CLI which you will
+                use to upload data.</h4>
+            <a class="item" href="{{ cli_install_url }}">
+                CIDC-CLI Install Instructions
+            </a>
+        </div>
+        <div class="ui segment">
+            <h4>You also need to install the Google Cloud SDK</h4>
+            <a class="item" href="https://cloud.google.com/sdk/install" target="_blank">
+                Google Cloud SDK
+            </a>
+
+            <h4>After installation you'll need to authenticate the SDK with the following command.
+                Use the credentials you created for this portal.</h4>
+
+            <div class="ui black segment inverted console_text">
+                $ gcloud auth application-default login
+            </div>
+
+        </div>
+    </div>
+
+    <div class="ui segments">
+        <div class="ui message attached">
+            <h3 class="ui header">Olink File Types</h3>
+        </div>
+        <div class="ui segment">
+
+            <p>Our Olink upload process expects the upload of 3 files;</p>
+
+            <p><b>Raw Data File</b> - This is the csv before it has been processed in the NPX Manager.</p>
+            <p><b>Processed Data File</b> - This is the xlsx file that is exported from NPX Manager.</p>
+            <p><b>Performance Report</b> - This is the PDF that has QC Metrics about the assay.</p>
+
+            These files must be all co-located in the same folder in order to upload.
+
+        </div>
+    </div>
+
+    <div class="ui segments">
+        <div class="ui message attached">
+            <h3 class="ui header">Uploading Files</h3>
+        </div>
+        <div class="ui segment">
+            <h4>Start the CLI and use your JWT to log in</h4>
+
+            <div class="ui segments">
+                <div class="ui black segment inverted console_text">
+                    (Cmd) jwt_login ey927853.......
+                </div>
+            </div>
+
+            <h4>Run the command to start the Olink upload process</h4>
+
+            <div class="ui segments">
+                <div class="ui black segment inverted console_text">
+                    (Cmd) upload_no_pipeline
+                </div>
+            </div>
+
+            <h4>You'll see a list of trials that you can upload data for, select your trail by entering its
+                corresponding number</h4>
+            <div class="ui segments">
+                <div class="ui black segment inverted console_text">
+                    This is the upload function<br/>
+                    <br/>
+                    =====| Available Trials |=====<br/>
+                    [1] - dna_seq_pipeline<br/>
+                    [2] - test_trial<br/>
+                    [3] - rna_seq_pipeline<br/>
+                </div>
+            </div>
+
+            <h4>After selection the trial you should see the list of data types you can upload, select olink_data</h4>
+            <div class="ui segments">
+                <div class="ui black segment inverted console_text">
+                    =====| Available Assays |=====<br/>
+                    [1] - olink_data<br/>
+                </div>
+            </div>
+
+            <h4>You'll be prompted to enter the directory where the 3 required files are, this is relative to where you
+                started the CIDC-CLI</h4>
+            <div class="ui segments">
+                <div class="ui black segment inverted console_text">
+                    Please enter the path where your sample data resides. :<br/>
+                    ./olink/sample_1/
+                </div>
+            </div>
+
+            <h4>The CLI will show you the files it found in the specified directory, confirm to proceed</h4>
+            <div class="ui segments">
+                <div class="ui black segment inverted console_text">
+                    HIMC_12122017_Ct.csv<br/>
+                    exampleOlink_CIMAC_CIDC2018.pdf<br/>
+                    OlinkMultiplexPlatform2018_short.pdf<br/>
+                    EXAMPLEOlink_CIMAC_CIDC_NPX_LOD.xlsx<br/>
+                    These are the files found in the provided directory, proceed? [Y/N]Y<br/>
+                </div>
+            </div>
+
+            <h4>You now need to tell the CLI what each file corresponds to</h4>
+            <div class="ui segments">
+                <div class="ui black segment inverted console_text">
+                    You are uploading a data format which required 3 files per upload. Follow the prompts and select the
+                    corresponding files.<br />
+                    Please choose the file which corresponds to: data<br />
+                    [1] - HIMC_12122017_Ct.csv<br />
+                    [2] - example_report.pdf<br />
+                    [3] - example_npx.xlsx<br />
+                </div>
+            </div>
+
+            <h4>After selecting all the required files you'll be given a confirmation and an ID corresponding to the upload</h4>
+
+        </div>
+
+
+    </div>
+
+    </div>
+
+
+{% endblock %}
