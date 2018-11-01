@@ -23,26 +23,12 @@
                     CIMAC User Home
                 </a>
 
-                <div class="item ui dropdown">
-                    Instructions
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <a class="item" href="{{ cli_install_url }}">
-                            CIDC-CLI Install
-                        </a>
-                        <a class="item" href="{{ olink_upload_url }}">
-                            Olink Upload
-                        </a>
-                    </div>
-                </div>
+                    <a class="item" href="{{ cli_install_url }}">
+                        CIDC-CLI Install Instructions
+                    </a>
 
-                <a class="item" href="{{ upload_status_url }}">
-                    Upload Status
-                </a>
-
-                {% if user_role == "admin" %}
-                    <a class="item" href="{{ admin_home_url }}">
-                        CIDC Admin Panel
+                    <a class="item" href="{{ olink_upload_url }}">
+                        Olink Upload Instructions
                     </a>
                 {% endif %}
 
