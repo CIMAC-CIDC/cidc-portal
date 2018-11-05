@@ -26,6 +26,7 @@ def base_user_info(session):
                 cimac_biofx_home_url=url_for_with_prefix("/cimac_biofx/home"),
                 cli_install_url=url_for_with_prefix("/cimac_biofx/cli-install"),
                 olink_upload_url=url_for_with_prefix("/cimac_biofx/olink-upload"),
+                upload_status_url=url_for_with_prefix("/cimac_biofx/uploads"),
                 admin_home_url=url_for_with_prefix("/admin/home"),
                 privacy_url=url_for_with_prefix("/privacy"),
                 logout_url=url_for_with_prefix("/logout"),
