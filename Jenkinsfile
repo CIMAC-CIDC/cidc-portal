@@ -53,7 +53,7 @@ spec:
     stage('Docker build') {
         steps {
             container('docker') {
-                sh 'docker build -t portal .'
+                sh 'docker build -t portal . --no-cache'
             }
         }
     }
