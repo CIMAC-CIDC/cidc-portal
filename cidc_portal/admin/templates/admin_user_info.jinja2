@@ -72,14 +72,24 @@
 
         </form>
 
-        <h4>Add user to trial</h4>
+        <h4>Give user Trial Permissions</h4>
         <form method="POST" action="{{ add_user_to_trial_url }}" class="ui form">
 
             <div class="ui grid">
                 <div class="six wide column">
                 <select name="add_user_to_trial" class="ui fluid dropdown">
-                    {% for trial in trials_user_not_in %}
+                    {% for trial in all_trials %}
                         <option value="{{ trial["_id"] }}">{{ trial["trial_name"] }}</option>
+                    {% endfor %}
+                </select>
+                <select name="assay_type" class="ui fluid dropdown">
+                    {% for assay in assays %}
+                        <option value="{{ assay["_id"] }}">{{ assay["assay_name"] }}</option>
+                    {% endfor %}
+                </select>
+                <select name="trial_permission" class="ui fluid dropdown">
+                    {% for perm_type in trial_assay_permission_types %}
+                        <option value="{{ perm_type[1] }}">{{ perm_type[0] }}</option>
                     {% endfor %}
                 </select>
                 </div>
@@ -91,6 +101,27 @@
             <input type="hidden" name="user_id" value="{{ retrieved_user_info["_id"] }}" />
 
         </form>
+
+        <h4>Current Trial Permissions</h4>
+
+        <table class="ui sortable selectable table">
+        <thead>
+            <tr>
+                <th>Trial</th>
+                <th>Assay</th>
+                <th>Role</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for permission in permissions_display %}
+                <tr>
+                    <td>{{ permission.trial }}</td>
+                    <td>{{ permission.assay }}</td>
+                    <td>{{ permission.role }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        </table>
 
         <h4>Remove user from trial</h4>
         <form method="POST" action="{{ remove_user_from_trial_url }}" class="ui form">
