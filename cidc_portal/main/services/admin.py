@@ -15,6 +15,15 @@ from constants import ROLE_LIST
 
 EVE_FETCHER = SmartFetch(EVE_URL)
 
+TRIAL_ASSAY_PERMISSION_TYPES = [
+    ("Read", "read"),
+    ("Write", "write"),
+    ("Trial Read", "trial_r"),
+    ("Trial Write", "trial_w"),
+    ("Assay Read", "assay_r"),
+    ("Assay Write", "assay_w"),
+]
+
 
 def fetch_users(jwt: str) -> dict:
     """
@@ -78,7 +87,9 @@ def fetch_users_trials(jwt: str, selected_user: str) -> dict:
     return trials_response.json()
 
 
-def add_user_to_trial(jwt: str, trial_id: str, user_ids: List[str]) -> bool:
+def add_user_to_trial(
+    jwt: str, trial_id: str, user_ids: List[str], assay_type: str, trial_permission
+) -> bool:
     """
     Adds a user or users to a trial.
 
@@ -90,41 +101,47 @@ def add_user_to_trial(jwt: str, trial_id: str, user_ids: List[str]) -> bool:
     Returns:
         bool -- True if addition is successful, else false.
     """
-    # Get users emails
     user_records = user_fetch(jwt, user_ids)["_items"]
-    emails = [user["email"] for user in user_records]
 
-    trial_query = "trials/%s" % trial_id
-    trial_info = EVE_FETCHER.get(token=jwt, endpoint=trial_query).json()
-    trial_etag = trial_info["_etag"]
-    trial_collabs = trial_info["collaborators"]
+    user_permission = user_records[0]["permissions"]
 
-    updated_collabs = set(emails + trial_collabs)
+    # ignore if user has this permission record.
+    for permission in user_permission:
+        if (
+            permission["trial"] == trial_id
+            and permission["assay"] == assay_type
+            and permission["role"] == trial_permission
+        ):
+            return True
 
-    if len(updated_collabs) == len(trial_collabs):
-        logging.warning(
-            {
-                "message": "Warning! Updated collaborators list is identical to current list."
-                "Operation not performed.",
-                "category": "WARNING-PORTAL-FAIR-UPDATE-COLLABORATORS",
-            }
-        )
-        return False
+    user_permission.append(
+        {"trial": trial_id, "assay": assay_type, "role": trial_permission}
+    )
 
-    payload = {"collaborators": list(updated_collabs)}
+    payload = {"permissions": user_permission}
 
     try:
         EVE_FETCHER.post(
             json=payload,
-            headers={"If-Match": trial_etag, "X-HTTP-Method-Override": "PATCH"},
+            headers={
+                "If-Match": user_records[0]["_etag"],
+                "X-HTTP-Method-Override": "PATCH",
+            },
             token=jwt,
-            endpoint=trial_query,
+            endpoint="accounts/%s" % user_records[0]["_id"],
         )
 
-        logging.info({
-                "message": "User(s) %s added to trial %s by %s" %
-                           (emails, trial_id, session["cidc_user_info"]["username"]),
-                "category": "INFO-PORTAL-ADD-USER-TRIAL"})
+        logging.info(
+            {
+                "message": "User(s) %s added to trial %s by %s"
+                % (
+                    user_records[0]["email"],
+                    trial_id,
+                    session["cidc_user_info"]["username"],
+                ),
+                "category": "INFO-PORTAL-ADD-USER-TRIAL",
+            }
+        )
 
         return True
     except RuntimeError:
@@ -176,10 +193,13 @@ def remove_user_from_trial(jwt: str, trial_id: str, user_ids: List[str]) -> bool
             endpoint=trial_query,
         )
 
-        logging.info({
-                "message": "User(s) %s removed from trial %s by %s" %
-                           (emails, trial_id, session["cidc_user_info"]["username"]),
-                "category": "INFO-PORTAL-REMOVE-USER-TRIAL"})
+        logging.info(
+            {
+                "message": "User(s) %s removed from trial %s by %s"
+                % (emails, trial_id, session["cidc_user_info"]["username"]),
+                "category": "INFO-PORTAL-REMOVE-USER-TRIAL",
+            }
+        )
 
         return True
     except RuntimeError:
@@ -215,10 +235,13 @@ def change_user_role(jwt: str, user_id: str, role: str) -> bool:
     try:
         EVE_FETCHER.patch(endpoint=endpoint, token=jwt, headers=headers, json=update)
 
-        logging.info({
-                "message": "User(s) %s role changed to %s by %s" %
-                           (user_info["email"], role, session["cidc_user_info"]["username"]),
-                "category": "INFO-PORTAL-CHANGE-ROLE"})
+        logging.info(
+            {
+                "message": "User(s) %s role changed to %s by %s"
+                % (user_info["email"], role, session["cidc_user_info"]["username"]),
+                "category": "INFO-PORTAL-CHANGE-ROLE",
+            }
+        )
 
         return True
     except RuntimeError:
