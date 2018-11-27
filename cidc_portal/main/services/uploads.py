@@ -27,9 +27,13 @@ def get_olink_status(jwt: str) -> bool:
     for upload in uploads_response.json()["_items"]:
         for data_entry in data_response.json()["_items"]:
             if data_entry["_id"] == upload["record_id"]:
-                status_list.append({"id": upload["record_id"],
-                                     "file_name": data_entry["file_name"],
-                                     "validation_errors": upload["validation_errors"]})
+                status_list.append(
+                    {
+                        "id": upload["record_id"],
+                        "file_name": data_entry["file_name"],
+                        "validation_errors": upload["validation_errors"],
+                    }
+                )
 
     return status_list
 
@@ -38,9 +42,12 @@ def remove_data_record(jwt: str, data_id: str) -> bool:
     """
     In order to remove uploaded files we update the visibility flag on the data object to be false.
 
-    :param jwt: User's JWT.
-    :param data_id: Identifier of data record to be deleted.
-    :return:
+    Arguments:
+        jwt {str} -- User's JWT.
+        data_id {str} -- Identifier of data record to be deleted.
+
+    Returns:
+        bool -- True if successful, else False.
     """
 
     data_query = "data/%s" % data_id
@@ -57,11 +64,13 @@ def remove_data_record(jwt: str, data_id: str) -> bool:
             endpoint=data_query,
         )
 
-        logging.info({
+        logging.info(
+            {
                 "message": "Data record %s removed" % data_id,
-                "category": "INFO-PORTAL-REMOVE-DATA-RECORD"})
+                "category": "INFO-PORTAL-REMOVE-DATA-RECORD",
+            }
+        )
 
         return True
     except RuntimeError:
         return False
-
