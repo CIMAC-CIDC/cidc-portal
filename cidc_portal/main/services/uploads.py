@@ -64,4 +64,3 @@ def remove_data_record(jwt: str, data_id: str) -> bool:
         return True
     except RuntimeError:
         return False
-
