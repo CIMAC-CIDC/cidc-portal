@@ -222,7 +222,7 @@ def change_user_role(jwt: str, user_id: str, role: str) -> bool:
     if role not in ROLE_LIST:
         log = "Supplied role % is not a valid role" % role
         logging.warning({"message": log, "category": "WARNING-PORTAL-ACCOUNTS"})
-        return
+        return False
 
     endpoint_with_query = "accounts/%s" % user_id
     user_response = EVE_FETCHER.get(token=jwt, endpoint=endpoint_with_query)

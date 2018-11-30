@@ -93,6 +93,7 @@ spec:
           sh 'helm repo add cidc "http://${CIDC_CHARTMUSEUM_SERVICE_HOST}:${CIDC_CHARTMUSEUM_SERVICE_PORT}" '
           sh 'sleep 10'
           sh 'helm upgrade portal cidc/portal --recreate-pods --version=0.1.0-staging --set imageSHA=$(gcloud container images list-tags --format="get(digest)" --filter="tags:staging" gcr.io/cidc-dfci/portal)  --set image.tag=staging --tls'
+          sh 'kubectl wait --for=condition=Ready --timeout=180s pod -l app=portal'
         }
       }
     }
