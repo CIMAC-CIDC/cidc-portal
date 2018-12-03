@@ -20,6 +20,9 @@ deprecation = "*"
 black = "*"
 requests = "*"
 bson = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-html = "*"
 
 [requires]
 python_version = "3.6"
