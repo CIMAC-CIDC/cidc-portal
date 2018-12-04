@@ -1,3 +1,3 @@
-from cidc_portal.cidc_portal import create_app
+from cidc_portal import cidc_portal
 
-app = create_app()
+app = cidc_portal.create_app()
