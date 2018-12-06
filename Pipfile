@@ -20,6 +20,7 @@ deprecation = "*"
 black = "*"
 requests = "*"
 bson = "*"
+flask-cdn = "*"
 
 [requires]
 python_version = "3.6"
