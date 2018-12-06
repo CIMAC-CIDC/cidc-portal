@@ -61,7 +61,7 @@ def remove_data_record(jwt: str, data_id: str) -> bool:
             json=payload,
             headers={"If-Match": data_etag, "X-HTTP-Method-Override": "PATCH"},
             token=jwt,
-            endpoint=data_query,
+            endpoint="data_vis/%s" % data_id,
         )
 
         logging.info(
