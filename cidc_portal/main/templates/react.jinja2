@@ -1,0 +1,18 @@
+{% extends "base_header.jinja2" %}
+
+{% block content %}
+    <script type="text/javascript">
+        window.initialData = {{ session["jwt_token"]|tojson }}
+    </script>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+        <title>Mock Olink Page</title>
+        <link rel=stylesheet type=text/css href="https://storage.googleapis.com/cidc-js-build/static/css/main.css" >
+    </head>
+        <body>
+            <noscript>You need to enable JavaScript to run this app.</noscript>
+            <div id="root"></div>
+            <script type="text/javascript" src="https://storage.googleapis.com/cidc-js-build/static/js/main.js"></script>
+        </body>
+{% endblock %}

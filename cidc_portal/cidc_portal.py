@@ -1,17 +1,17 @@
-from flask import Flask
-from flask import session
+import logging
 from datetime import timedelta
 
-from constants import FLASK_SECRET_KEY
-from constants import SESSION_TIMEOUT_MINUTES
-
 from cidc_utils.loghandler import StackdriverJsonFormatter
+from flask import Flask, session
+from flask_cdn import CDN
 
-import logging
+from constants import FLASK_SECRET_KEY, SESSION_TIMEOUT_MINUTES
 
-APP = Flask(__name__)
+APP = Flask(__name__, static_folder='static')
 APP.config["SECRET_KEY"] = FLASK_SECRET_KEY
+APP.config['CDN_DOMAIN'] = "https://storage.googleapis.com/cidc-js-build/"
 APP.url_map.strict_slashes = False
+CDN_INSTANCE = CDN()
 
 
 def configure_logging():
@@ -50,5 +50,5 @@ def create_app():
     APP.register_blueprint(admin_bp)
 
     configure_logging()
-
+    CDN_INSTANCE.init_app(APP)
     return APP
