@@ -243,3 +243,30 @@ def request_pending():
         return redirect(url_for_with_prefix("/register"))
 
     return render_template("request-pending.jinja2")
+
+
+@main_bp.route("/browse-files", methods=["GET"])
+@requires_login()
+@requires_roles([CIMAC_BIOFX_ROLE, ADMIN_ROLE])
+def browse_files():
+    session["cidc_user_info"] = get_user_info(session["jwt_token"])
+
+    return render_template('react.jinja2')
+
+
+@main_bp.route("/wes-pipeline", methods=["GET"])
+@requires_login()
+@requires_roles([CIMAC_BIOFX_ROLE, ADMIN_ROLE])
+def wes_pipeline():
+    session["cidc_user_info"] = get_user_info(session["jwt_token"])
+
+    return render_template('react.jinja2')
+
+
+@main_bp.route("/wes-upload", methods=["GET"])
+@requires_login()
+@requires_roles([CIMAC_BIOFX_ROLE, ADMIN_ROLE])
+def wes_upload_instructions():
+    session["cidc_user_info"] = get_user_info(session["jwt_token"])
+
+    return render_template('react.jinja2')

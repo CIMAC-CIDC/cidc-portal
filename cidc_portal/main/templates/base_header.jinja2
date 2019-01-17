@@ -33,12 +33,29 @@
                         <a class="item" href="{{ olink_upload_url }}">
                             Olink Upload
                         </a>
+                        <a class="item" href="{{ wes_upload_instructions_url }}">
+                            WES Upload
+                        </a>
                     </div>
                 </div>
 
                 <a class="item" href="{{ upload_status_url }}">
                     Upload Status
                 </a>
+
+                <a class="item" href="{{ browse_files_url }}">
+                    Browse Files
+                </a>
+
+                <div class="item ui dropdown">
+                    Pipelines
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a class="item" href="{{ wes_pipelines_url }}">
+                            WES
+                        </a>
+                    </div>
+                </div>
 
                 {% if user_role == "admin" %}
                     <a class="item" href="{{ admin_home_url }}">
@@ -63,7 +80,7 @@
     </div>
     <div class="row">
         <div class="two wide column"></div>
-        <div class="ten wide column">
+        <div class="sixteen wide column">
 
             {% block content %}{% endblock %}
 
