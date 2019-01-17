@@ -87,30 +87,3 @@ def remove_upload():
     remove_data_record(session["jwt_token"], data_id)
 
     return redirect(url_for_with_prefix("/cimac_biofx/uploads"))
-
-
-@cimac_biofx_bp.route("/cimac_biofx/browse-files", methods=["GET"])
-@requires_login()
-@requires_roles([CIMAC_BIOFX_ROLE, ADMIN_ROLE])
-def browse_files():
-    session["cidc_user_info"] = get_user_info(session["jwt_token"])
-
-    return render_template('react.jinja2')
-
-
-@cimac_biofx_bp.route("/cimac_biofx/wes-pipeline", methods=["GET"])
-@requires_login()
-@requires_roles([CIMAC_BIOFX_ROLE, ADMIN_ROLE])
-def wes_pipeline():
-    session["cidc_user_info"] = get_user_info(session["jwt_token"])
-
-    return render_template('react.jinja2')
-
-
-@cimac_biofx_bp.route("/cimac_biofx/wes-upload", methods=["GET"])
-@requires_login()
-@requires_roles([CIMAC_BIOFX_ROLE, ADMIN_ROLE])
-def wes_upload_instructions():
-    session["cidc_user_info"] = get_user_info(session["jwt_token"])
-
-    return render_template('react.jinja2')
